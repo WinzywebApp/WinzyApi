@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 // react-hot-toast import
 import toast, { Toaster } from "react-hot-toast";
 
-const API_BASE = "http://localhost:5000";
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 const getPlatformIcon = (icon) => {
   switch (icon) {
@@ -77,9 +77,12 @@ export default function TaskPage() {
   const fetchTasks = async (taskType) => {
     setLoading(true);
     try {
-      const response = await axios.get(`${API_BASE}/api/task/available/${taskType}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
+      const response = await axios.get(
+        `${API_BASE}/api/task/available/${taskType}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
       setTasks(response.data.tasks);
     } catch (err) {
       console.error("Error fetching tasks:", err);

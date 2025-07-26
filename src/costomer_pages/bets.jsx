@@ -3,9 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ArrowLeft, Clock } from "lucide-react";
 
-import dotenv from "dotenv"
-dotenv.config()
-const API_BASE = process.env.API_BASE_URL;
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 const BetItemsGrid = () => {
   const [products, setProducts] = useState([]);
@@ -78,8 +76,8 @@ const BetItemsGrid = () => {
           const countdown = countdowns[product._id] || {};
 
           return (
-            <Link
-             
+            <div
+              key={product._id}
               className="group bg-white border border-blue-100 rounded-2xl shadow-md hover:shadow-xl hover:scale-[1.02] transition-all duration-300 overflow-hidden relative"
             >
               {/* 🖼 Image */}
@@ -130,7 +128,6 @@ const BetItemsGrid = () => {
 
                 {/* 🎁 Bet Now Button */}
                 <Link
-                  key={product._id}
                   to={`/bet`}
                   state={{ product }}
                   className="flex justify-center mt-3"
@@ -140,7 +137,7 @@ const BetItemsGrid = () => {
                   </div>
                 </Link>
               </div>
-            </Link>
+            </div>
           );
         })}
       </div>

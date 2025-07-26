@@ -1,11 +1,8 @@
-// AuthPage.jsx
 import { useState } from "react";
 import axios from "axios";
 import { toast, Toaster } from "react-hot-toast";
 
-import dotenv from "dotenv"
-dotenv.config()
-const API_BASE = process.env.API_BASE_URL;
+const API_BASE = import.meta.env.VITE_API_BASE_URL;  
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -52,7 +49,6 @@ export default function AuthPage() {
       toast.error(error.response?.data?.message || "Something went wrong.");
     }
   };
-
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">

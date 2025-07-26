@@ -9,9 +9,7 @@ import {
   FaMoneyBillWave,
 } from "react-icons/fa";
 
-import dotenv from "dotenv"
-dotenv.config()
-const API_BASE = process.env.API_BASE_URL;
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 const ProductPage = () => {
   const location = useLocation();
@@ -46,10 +44,9 @@ const ProductPage = () => {
         <button
           onClick={() => navigate(-1)}
           className="bg-blue-600 text-xl p-2 rounded-full text-white transition"
->
+        >
           <FaArrowLeft />
         </button>
-       
       </header>
 
       {/* Product Card */}
@@ -89,14 +86,14 @@ const ProductPage = () => {
       {/* Footer */}
       <footer className="mt-auto px-4 py-6 bg-white">
         <button
-          onClick={() => navigate("/orderinfo", { state: { product}})}
-          className="w-full py-4 bg-blue-500  text-white font-semibold rounded-xl shadow-md hover:from-indigo-600 hover:to-blue-700 transition text-lg"
->
+          onClick={() => navigate("/orderinfo", { state: { product } })}
+          className="w-full py-4 bg-blue-500 text-white font-semibold rounded-xl shadow-md hover:from-indigo-600 hover:to-blue-700 transition text-lg"
+        >
           🚀 Buy Now
         </button>
       </footer>
     </div>
-);
+  );
 };
 
 export default ProductPage;

@@ -4,9 +4,7 @@ import { toast, Toaster } from "react-hot-toast";
 import { ChevronLeft, Send, CheckCircle, AlertCircle, Timer, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-import dotenv from "dotenv"
-dotenv.config()
-const API_BASE = process.env.API_BASE_URL;
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 export default function EmojiQuizApp() {
   const [questions, setQuestions] = useState([]);
@@ -101,7 +99,6 @@ export default function EmojiQuizApp() {
       toast.error("Something went wrong while submitting your answer.");
     }
   };
-
 
   if (loading) {
     return <div className="p-6 text-center text-blue-600">Loading quiz…</div>;

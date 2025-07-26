@@ -3,9 +3,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { FaPlus, FaPen, FaTrash, FaCoins } from "react-icons/fa";
 
-import dotenv from "dotenv"
-dotenv.config()
-const API_BASE = process.env.API_BASE_URL;
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 const AdminProductPage = () => {
   const [products, setProducts] = useState([]);

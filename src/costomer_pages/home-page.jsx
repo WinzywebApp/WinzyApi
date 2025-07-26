@@ -10,9 +10,8 @@ import {
   FaUserFriends,
 } from "react-icons/fa";
 import { MdCasino } from "react-icons/md";
-import dotenv from "dotenv"
-dotenv.config()
-const API_BASE = process.env.API_BASE_URL;
+
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 const sampleWinners = [
   { username: "@Nimsara", image: "https://via.placeholder.com/150" },
@@ -88,13 +87,12 @@ function HomePage() {
     { icon: <MdCasino className="text-orange-500 text-2xl" />, label: "Lucky Spin", route: "/spin" },
     { icon: <FaGift className="text-blue-500 text-2xl" />, label: "Gift Code", route: "/redeem" },
     { icon: <FaQuestionCircle className="text-green-500 text-2xl" />, label: "Quizzes", route: "/quize" },
+    { icon: <FaUserFriends className="text-purple-500 text-2xl" />, label: "Bet Items", route: "/bet-item" },
+    { icon: <FaUserCircle className="text-yellow-500 text-2xl" />, label: "Tasks", route: "/task" },
   ];
 
   return (
     <div className="min-h-screen  pb-20 relative overflow-x-hidden">
-      {/* Gift rain behind all content */}
-      
-
       {/* Navbar with highest z-index */}
       <div className="fixed top-0 left-0 z-30 w-full h-16 bg-blue-400 rounded-r-2xl flex items-center justify-between px-4 text-white shadow-md">
         <FaBars className="w-6 h-6" />
@@ -117,42 +115,32 @@ function HomePage() {
         </div>
       </div>
 
+      {/* Feature Grid Title */}
+      <h2 className="text-lg font-bold text-gray-700 px-4 mt-8 mb-2">Earn Coins 💰</h2>
+
       {/* Feature Grid */}
-     {/* Feature Grid Title */}
-<h2 className="text-lg font-bold text-gray-700 px-4 mt-8 mb-2">Earn Coins 💰</h2>
+      <section className="flex gap-5 overflow-x-auto px-4 scrollbar-hide">
+        {features.map(({ icon, label, route }, i) => (
+          <button
+            key={i}
+            className="relative group w-24 h-28 bg-gradient-to-br from-white to-blue-50 border border-blue-100 shadow-lg rounded-2xl flex flex-col items-center justify-center hover:scale-105 transition duration-300"
+            onClick={() => navigate(route)}
+          >
+            <div className="bg-white shadow-inner p-3 rounded-full group-hover:rotate-12 transition-transform duration-300">
+              {icon}
+            </div>
+            <span className="mt-2 text-[13px] font-medium text-gray-700 group-hover:text-blue-500 transition-colors text-center">
+              {label}
+            </span>
+          </button>
+        ))}
+      </section>
 
-{/* Feature Grid */}
-<section className="flex gap-5 overflow-x-auto px-4 scrollbar-hide">
-  {[
-    { icon: <FaVideo className="text-pink-500 text-2xl" />, label: "Video Earn", route: "/watch" },
-    { icon: <MdCasino className="text-orange-500 text-2xl" />, label: "Lucky Spin", route: "/spin" },
-    { icon: <FaGift className="text-blue-500 text-2xl" />, label: "Gift Code", route: "/redeem" },
-    { icon: <FaQuestionCircle className="text-green-500 text-2xl" />, label: "Quizzes", route: "/quize" },
-    { icon: <FaUserFriends className="text-purple-500 text-2xl" />, label: "Bet Items", route: "/bet-item" },
-    { icon: <FaUserCircle className="text-yellow-500 text-2xl" />, label: "Tasks", route: "/task" },
-  ].map(({ icon, label, route }, i) => (
-    <button
-      key={i}
-      className="relative group w-24 h-28 bg-gradient-to-br from-white to-blue-50 border border-blue-100 shadow-lg rounded-2xl flex flex-col items-center justify-center hover:scale-105 transition duration-300"
-      onClick={() => navigate(route)}
-    >
-      <div className="bg-white shadow-inner p-3 rounded-full group-hover:rotate-12 transition-transform duration-300">
-        {icon}
-      </div>
-      <span className="mt-2 text-[13px] font-medium text-gray-700 group-hover:text-blue-500 transition-colors text-center">
-        {label}
-      </span>
-    </button>
-  ))}
-</section>
-
-      {/* Spacer for fixed navbar */}
+      {/* Spacer */}
       <div className="h-[10px]"></div>
 
-
-
       {/* Category Filter */}
-      <div className="sticky top-16  flex justify-center items-center w-full py-2">
+      <div className="sticky top-16 flex justify-center items-center w-full py-2">
         <div className="flex space-x-2 bg-white p-2 rounded-xl shadow-sm">
           {categories.map((cat) => (
             <button
@@ -193,11 +181,9 @@ function HomePage() {
         ))}
       </div>
     </div>
-    
   );
 }
 
-// Winner card component
 function WinnerCard({ winner }) {
   return (
     <div className="bg-blue-500 shadow-lg rounded-2xl flex items-center justify-between p-4 w-[90%] max-w-md">

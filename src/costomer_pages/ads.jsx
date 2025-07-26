@@ -5,9 +5,8 @@ import { MonitorPlay, CheckCircle, Clock } from "lucide-react";
 import { FaCoins, FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
-import dotenv from "dotenv"
-dotenv.config()
-const API_BASE = process.env.API_BASE_URL; 
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 const MAX_ADS_PER_DAY = 10;
 
 export default function WatchAdsPage() {

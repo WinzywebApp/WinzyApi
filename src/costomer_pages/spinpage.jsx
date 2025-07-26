@@ -3,9 +3,9 @@ import axios from "axios";
 import { FaCoins, FaArrowLeft } from "react-icons/fa";
 import { toast, Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import dotenv from "dotenv"
-dotenv.config()
-const API_BASE = process.env.API_BASE_URL;
+
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 export default function SpinAndWin() {
   const navigate = useNavigate();
   const [number, setNumber] = useState("0000");
@@ -30,7 +30,7 @@ export default function SpinAndWin() {
     if (isSpinning || spinsRemaining <= 0) return;
     setIsSpinning(true);
     setCoins(null);
-   
+
     const token = localStorage.getItem("token");
     if (!token) {
       toast.error("Please log in first");
@@ -40,7 +40,7 @@ export default function SpinAndWin() {
 
     try {
       const res = await axios.post(
-        `${API_BASE}/api/spin/spin`,  // <-- fixed quotes here
+        `${API_BASE}/api/spin/spin`,
         {},
         {
           headers: {
@@ -49,8 +49,7 @@ export default function SpinAndWin() {
         }
       );
 
-      const { number: finalNum, coins: wonCoins, spinsRemaining, message } =
-        res.data;
+      const { number: finalNum, coins: wonCoins, spinsRemaining, message } = res.data;
 
       animateNumber(finalNum);
       setCoins(wonCoins);

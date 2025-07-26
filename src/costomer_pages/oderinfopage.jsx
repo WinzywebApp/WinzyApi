@@ -2,11 +2,9 @@ import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { FaArrowLeft, FaCheckCircle, FaTimesCircle, FaMoneyBillWave, FaCoins, FaShoppingBag } from "react-icons/fa";
+import { FaArrowLeft, FaCheckCircle, FaTimesCircle, FaMoneyBillWave, FaCoins } from "react-icons/fa";
 
-import dotenv from "dotenv"
-dotenv.config()
-const API_BASE = process.env.API_BASE_URL;
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 const OrderPage = () => {
   const location = useLocation();
@@ -79,10 +77,8 @@ const OrderPage = () => {
           </button>
         </div>
         <h1 className="text-2xl font-semibold tracking-wide flex items-center gap-2">
-          
           Oder infomation
-        
-        </h1> 
+        </h1>
       </header>
 
       {/* Form Section */}

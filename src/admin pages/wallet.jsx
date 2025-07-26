@@ -3,9 +3,7 @@ import axios from "axios";
 import { FaSearch, FaCheckCircle } from "react-icons/fa";
 import toast from "react-hot-toast";
 
-import dotenv from "dotenv"
-dotenv.config()
-const API_BASE = process.env.API_BASE_URL;
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 export default function AdminRequestPage() {
   const [username, setUsername] = useState("");
@@ -50,7 +48,6 @@ export default function AdminRequestPage() {
       setProcessingId("");
     }
   };
-
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-blue-50 to-blue-100 p-4">

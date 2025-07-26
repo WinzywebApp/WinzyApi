@@ -2,9 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FaPen, FaTrash, FaPlus } from "react-icons/fa";
 import toast, { Toaster } from "react-hot-toast";
-import dotenv from "dotenv"
-dotenv.config()
-const API_BASE = process.env.API_BASE_URL;
+
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 const QuizManager = () => {
   const [quizzes, setQuizzes] = useState([]);
@@ -36,7 +35,7 @@ const QuizManager = () => {
   const fetchQuizzes = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`${API_URL}/api/question/emoji-question/all`, axiosConfig);
+      const res = await axios.get(`${API_BASE}/api/question/emoji-question/all`, axiosConfig);
       setQuizzes(res.data.data || []);
     } catch (err) {
       toast.error("❌ Failed to load quizzes");
@@ -50,7 +49,7 @@ const QuizManager = () => {
     if (!window.confirm("Are you sure you want to delete this quiz?")) return;
 
     try {
-      await axios.delete(`${API_URL}/api/question/emoji-question/${id}`, axiosConfig);
+      await axios.delete(`${API_BASE}/api/question/emoji-question/${id}`, axiosConfig);
       toast.success("🗑️ Quiz deleted");
       fetchQuizzes();
     } catch (err) {
@@ -76,7 +75,7 @@ const QuizManager = () => {
     }
     try {
       await axios.put(
-        `${API_URL}/api/question/emoji-question/${editingQuiz._id}`,
+        `${API_BASE}/api/question/emoji-question/${editingQuiz._id}`,
         {
           category: editingQuiz.category,
           emoji_clue: editingQuiz.emoji_clue,
@@ -102,7 +101,7 @@ const QuizManager = () => {
       return;
     }
     try {
-      await axios.post(`${API_URL}/api/question/emoji-question/create`, newQuiz, axiosConfig);
+      await axios.post(`${API_BASE}/api/question/emoji-question/create`, newQuiz, axiosConfig);
       toast.success("🎉 Quiz created!");
       setShowAddForm(false);
       setNewQuiz({ category: "", emoji_clue: "", correct_answer: "", hint: "" });

@@ -4,9 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-import dotenv from "dotenv"
-dotenv.config()
-const API_BASE = process.env.API_BASE_URL;
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 const GiftRedeem = () => {
   const [code, setCode] = useState("");
@@ -41,6 +39,7 @@ const GiftRedeem = () => {
       toast.error(err.response?.data?.message || "Failed to redeem code");
     }
   };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex flex-col">
       {/* Header */}

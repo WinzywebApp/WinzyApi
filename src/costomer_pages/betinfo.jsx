@@ -4,9 +4,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { FaArrowLeft, FaCoins, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
-import dotenv from "dotenv"
-dotenv.config()
-const API_BASE = process.env.API_BASE_URL;
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 const BetPage = () => {
   const navigate = useNavigate();
@@ -68,6 +66,7 @@ const BetPage = () => {
         <button
           onClick={() => navigate(-1)}
           className="bg-white text-blue-600 p-2 rounded-full mr-4 shadow"
+          aria-label="Go back"
         >
           <FaArrowLeft />
         </button>
@@ -76,7 +75,11 @@ const BetPage = () => {
 
       {/* Product Details */}
       <div className="bg-white shadow rounded-xl p-5 mb-6 flex gap-4 items-center">
-        <img src={product.image} alt={product.name} className="w-24 h-24 object-cover rounded-xl" />
+        <img
+          src={product.image}
+          alt={product.name}
+          className="w-24 h-24 object-cover rounded-xl"
+        />
         <div>
           <h2 className="text-lg font-semibold text-gray-800">{product.name}</h2>
           <p className="text-gray-500 text-sm mt-1">{product.description}</p>

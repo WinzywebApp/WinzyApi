@@ -3,9 +3,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { FaVideo, FaSyncAlt } from "react-icons/fa";
 
-import dotenv from "dotenv"
-dotenv.config()
-const API_BASE = process.env.API_BASE_URL;
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 const plans = [
   {
@@ -42,7 +40,7 @@ export default function UserPlans() {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        `${API_BASE}/api/wallet/create`, // ✅ Corrected API URL
+        `${API_BASE}/api/wallet/create`,
         { amount },
         {
           headers: {

@@ -6,11 +6,7 @@ import axios from "axios";
 import confetti from "canvas-confetti";
 import toast from "react-hot-toast";
 
-
-
-import dotenv from "dotenv"
-dotenv.config()
-const API_BASE = process.env.API_BASE_URL;
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 function AccInfo() {
   const navigate = useNavigate();
@@ -19,9 +15,7 @@ function AccInfo() {
   const [orders, setOrders] = useState([]);
   const [bets, setBets] = useState([]);
   const [betsLoading, setBetsLoading] = useState(false);
-  
 
-  
   const copyReferralCode = () => {
     if (user?.refaral_code) {
       navigator.clipboard.writeText(user.refaral_code);
@@ -128,24 +122,23 @@ function AccInfo() {
         </div>
 
         {/* Wallet Actions */}
-        {/* Wallet Actions */}
-<div className="mt-6 px-4 space-y-2">
-  <h3 className="text-lg font-semibold mb-2">💼 Wallet Actions</h3>
-  <div className="flex gap-4">
-    <button
-      onClick={() => navigate("/plans")}
-      className="flex items-center gap-2 bg-green-500 text-white px-4 py-2 rounded-xl shadow hover:bg-green-600"
-    >
-      <FaPlus /> Add Money
-    </button>
-    <button
-      onClick={() => navigate("/wallet/history")}
-      className="flex items-center gap-2 bg-gray-200 text-gray-800 px-4 py-2 rounded-xl shadow hover:bg-gray-300"
-    >
-      <FaHistory /> Wallet History
-    </button>
-  </div>
-</div>
+        <div className="mt-6 px-4 space-y-2">
+          <h3 className="text-lg font-semibold mb-2">💼 Wallet Actions</h3>
+          <div className="flex gap-4">
+            <button
+              onClick={() => navigate("/plans")}
+              className="flex items-center gap-2 bg-green-500 text-white px-4 py-2 rounded-xl shadow hover:bg-green-600"
+            >
+              <FaPlus /> Add Money
+            </button>
+            <button
+              onClick={() => navigate("/wallet/history")}
+              className="flex items-center gap-2 bg-gray-200 text-gray-800 px-4 py-2 rounded-xl shadow hover:bg-gray-300"
+            >
+              <FaHistory /> Wallet History
+            </button>
+          </div>
+        </div>
 
         {/* Referrals */}
         <div className="mt-6 px-4 space-y-2">

@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FaCoins, FaPen, FaTrash, FaPlus } from "react-icons/fa";
 import toast, { Toaster } from "react-hot-toast";
-import dotenv from "dotenv"
-dotenv.config()
-const API_BASE = process.env.API_BASE_URL;
+
+// ✅ Corrected environment variable access
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 const GiftCodePage = () => {
   const [giftCodes, setGiftCodes] = useState([]);
@@ -20,7 +20,7 @@ const GiftCodePage = () => {
     },
   };
 
-
+  // ✅ API URL uses VITE_API_BASE_URL
   const API_URL = `${API_BASE}/api/redeem/gift`;
 
   useEffect(() => {
@@ -89,7 +89,6 @@ const GiftCodePage = () => {
     }
   };
 
-
   return (
     <div className="min-h-screen bg-gray-50 py-6 px-4">
       <Toaster />
@@ -97,14 +96,12 @@ const GiftCodePage = () => {
         🎁 Gift Code Manager
       </h1>
 
-      {/* Gift codes grid */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 max-w-4xl mx-auto px-2">
         {giftCodes.map((gift) => (
           <div
             key={gift._id}
             className="bg-cyan-100 border border-blue-500 rounded-2xl p-5 relative shadow-md flex flex-col justify-between min-h-[130px]"
           >
-            {/* Edit button top-right */}
             <button
               onClick={() => handleEdit(gift)}
               className="absolute top-3 right-3 bg-white rounded-full p-2 shadow-md hover:bg-blue-100 transition"
@@ -112,8 +109,6 @@ const GiftCodePage = () => {
             >
               <FaPen className="text-blue-600 w-5 h-5" />
             </button>
-
-            {/* Gift info */}
             <div>
               <p className="text-xs font-semibold text-gray-600 truncate">
                 ID: {gift._id}
@@ -122,8 +117,6 @@ const GiftCodePage = () => {
                 Code: {gift.code}
               </p>
             </div>
-
-            {/* Bottom row with coins and delete */}
             <div className="flex items-center justify-between mt-4">
               <div className="flex items-center gap-1 text-blue-700 font-semibold">
                 <FaCoins className="w-5 h-5" />
@@ -131,7 +124,7 @@ const GiftCodePage = () => {
               </div>
               <button
                 onClick={() => handleDelete(gift._id)}
-                className="text-red-600 hover:text-red-800 p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-red-400"
+                className="text-red-600 hover:text-red-800 p-2 rounded-full"
                 aria-label="Delete Gift Code"
               >
                 <FaTrash className="w-5 h-5" />
@@ -141,7 +134,6 @@ const GiftCodePage = () => {
         ))}
       </div>
 
-      {/* Edit Form Modal */}
       {showForm && editingGift && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 px-4">
           <div className="bg-white p-6 rounded-xl w-full max-w-md shadow-lg">
@@ -174,7 +166,7 @@ const GiftCodePage = () => {
                   setShowForm(false);
                   setEditingGift(null);
                 }}
-                className="btn btn-outline px-4 py-2 rounded border border-gray-400"
+                className="px-4 py-2 rounded border border-gray-400"
               >
                 Cancel
               </button>
@@ -189,7 +181,6 @@ const GiftCodePage = () => {
         </div>
       )}
 
-      {/* Add Button */}
       <button
         onClick={() => setShowAddForm(true)}
         className="fixed bottom-6 right-6 bg-blue-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition"
@@ -198,7 +189,6 @@ const GiftCodePage = () => {
         <FaPlus />
       </button>
 
-      {/* Add Form Modal */}
       {showAddForm && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 px-4">
           <div className="bg-white p-6 rounded-xl w-full max-w-md shadow-lg">
@@ -209,7 +199,9 @@ const GiftCodePage = () => {
                 type="text"
                 className="w-full border border-black p-2 rounded"
                 value={newGift.code}
-                onChange={(e) => setNewGift({ ...newGift, code: e.target.value })}
+                onChange={(e) =>
+                  setNewGift({ ...newGift, code: e.target.value })
+                }
               />
             </div>
             <div className="mb-4">
@@ -218,7 +210,9 @@ const GiftCodePage = () => {
                 type="number"
                 className="w-full border border-black p-2 rounded"
                 value={newGift.coins}
-                onChange={(e) => setNewGift({ ...newGift, coins: e.target.value })}
+                onChange={(e) =>
+                  setNewGift({ ...newGift, coins: e.target.value })
+                }
               />
             </div>
             <div className="flex justify-end gap-3">
@@ -227,7 +221,7 @@ const GiftCodePage = () => {
                   setShowAddForm(false);
                   setNewGift({ code: "", coins: "" });
                 }}
-                className="btn btn-outline px-4 py-2 rounded border border-gray-400"
+                className="px-4 py-2 rounded border border-gray-400"
               >
                 Cancel
               </button>

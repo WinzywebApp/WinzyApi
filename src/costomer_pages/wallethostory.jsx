@@ -6,10 +6,10 @@ import {
   FaCheck,
   FaMoneyBill,
 } from "react-icons/fa";
-import dotenv from "dotenv"
+
 import toast from "react-hot-toast";
-dotenv.config()
-const API_BASE = process.env.API_BASE_URL;
+
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 export default function UserWalletHistoryPage() {
   const [history, setHistory] = useState([]);

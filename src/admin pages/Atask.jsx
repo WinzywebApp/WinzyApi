@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FaPlus, FaTrash, FaPen } from "react-icons/fa";
 import toast, { Toaster } from "react-hot-toast";
-import dotenv from "dotenv"
-dotenv.config()
-const API_BASE = process.env.API_BASE_URL;
+
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 const TaskManager = () => {
   const [tasks, setTasks] = useState([]);
@@ -26,9 +25,8 @@ const TaskManager = () => {
   };
 
   useEffect(() => {
-   
     try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
+      const payload = JSON.parse(atob(token.split(".")[1]));
       setIsAdmin(payload.type === "admin");
     } catch {
       setIsAdmin(false);
@@ -40,7 +38,6 @@ const TaskManager = () => {
     if (!isAdmin) return; // prevent fetching if not admin
     try {
       const res = await axios.get(`${API_BASE}/api/task/all`, axiosConfig);
-      // API returns { success: true, tasks: [...] }
       if (res.data.success) {
         setTasks(res.data.tasks);
       } else {
@@ -139,7 +136,12 @@ const TaskManager = () => {
               <FaTrash />
             </button>
             <h4 className="font-bold text-emerald-800">{task.task_description}</h4>
-            <p className="text-sm text-gray-600 mb-1">Link: <a href={task.link} target="_blank" rel="noreferrer" className="text-blue-600 underline">{task.link}</a></p>
+            <p className="text-sm text-gray-600 mb-1">
+              Link:{" "}
+              <a href={task.link} target="_blank" rel="noreferrer" className="text-blue-600 underline">
+                {task.link}
+              </a>
+            </p>
             <p className="text-sm text-gray-600 mb-1">Type: {task.type}</p>
             <p className="text-sm text-gray-600 mb-1">Icon: {task.icon}</p>
             <div className="text-sm text-gray-500">🎁 Reward: {task.point_balance} coins</div>
@@ -167,9 +169,7 @@ const TaskManager = () => {
               rows={3}
               className="w-full border border-gray-300 rounded p-2 mb-4"
               value={editingTask.task_description}
-              onChange={(e) =>
-                setEditingTask({ ...editingTask, task_description: e.target.value })
-              }
+              onChange={(e) => setEditingTask({ ...editingTask, task_description: e.target.value })}
             />
 
             <label className="block mb-1 font-medium">Link</label>
@@ -222,10 +222,7 @@ const TaskManager = () => {
               >
                 Cancel
               </button>
-              <button
-                onClick={handleUpdate}
-                className="bg-emerald-600 text-white px-4 py-2 rounded"
-              >
+              <button onClick={handleUpdate} className="bg-emerald-600 text-white px-4 py-2 rounded">
                 Update
               </button>
             </div>
@@ -244,9 +241,7 @@ const TaskManager = () => {
               rows={3}
               className="w-full border border-gray-300 rounded p-2 mb-4"
               value={newTask.task_description}
-              onChange={(e) =>
-                setNewTask({ ...newTask, task_description: e.target.value })
-              }
+              onChange={(e) => setNewTask({ ...newTask, task_description: e.target.value })}
             />
 
             <label className="block mb-1 font-medium">Link</label>
@@ -284,9 +279,7 @@ const TaskManager = () => {
               type="number"
               className="w-full border border-gray-300 rounded p-2 mb-6"
               value={newTask.point_balance}
-              onChange={(e) =>
-                setNewTask({ ...newTask, point_balance: Number(e.target.value) })
-              }
+              onChange={(e) => setNewTask({ ...newTask, point_balance: Number(e.target.value) })}
             />
 
             <div className="flex justify-end space-x-3">
@@ -305,10 +298,7 @@ const TaskManager = () => {
               >
                 Cancel
               </button>
-              <button
-                onClick={handleAdd}
-                className="bg-emerald-600 text-white px-4 py-2 rounded"
-              >
+              <button onClick={handleAdd} className="bg-emerald-600 text-white px-4 py-2 rounded">
                 Save
               </button>
             </div>
