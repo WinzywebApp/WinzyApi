@@ -5,7 +5,9 @@ import { MonitorPlay, CheckCircle, Clock } from "lucide-react";
 import { FaCoins, FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
-const API_BASE = "http://localhost:5000"; // 🔁 Replace with your API base if needed
+import dotenv from "dotenv"
+dotenv.config()
+const API_BASE = process.env.API_BASE_URL; 
 const MAX_ADS_PER_DAY = 10;
 
 export default function WatchAdsPage() {

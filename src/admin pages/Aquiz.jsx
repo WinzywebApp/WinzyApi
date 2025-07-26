@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FaPen, FaTrash, FaPlus } from "react-icons/fa";
 import toast, { Toaster } from "react-hot-toast";
+import dotenv from "dotenv"
+dotenv.config()
+const API_BASE = process.env.API_BASE_URL;
 
 const QuizManager = () => {
   const [quizzes, setQuizzes] = useState([]);
@@ -24,8 +27,6 @@ const QuizManager = () => {
       Authorization: `Bearer ${token}`,
     },
   };
-
-  const API_URL = "http://localhost:5000";
 
   useEffect(() => {
     fetchQuizzes();

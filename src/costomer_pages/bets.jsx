@@ -3,7 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ArrowLeft, Clock } from "lucide-react";
 
-const API_BASE = "http://localhost:5000";
+import dotenv from "dotenv"
+dotenv.config()
+const API_BASE = process.env.API_BASE_URL;
 
 const BetItemsGrid = () => {
   const [products, setProducts] = useState([]);

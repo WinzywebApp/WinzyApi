@@ -4,7 +4,9 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { FaArrowLeft, FaCoins, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
-const API_BASE = "http://localhost:5000";
+import dotenv from "dotenv"
+dotenv.config()
+const API_BASE = process.env.API_BASE_URL;
 
 const BetPage = () => {
   const navigate = useNavigate();

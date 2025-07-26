@@ -3,7 +3,9 @@ import axios from "axios";
 import { FaSearch, FaCheckCircle } from "react-icons/fa";
 import toast from "react-hot-toast";
 
-const API_BASE = "http://localhost:5000"; // ✅ Replace with your actual API base
+import dotenv from "dotenv"
+dotenv.config()
+const API_BASE = process.env.API_BASE_URL;
 
 export default function AdminRequestPage() {
   const [username, setUsername] = useState("");

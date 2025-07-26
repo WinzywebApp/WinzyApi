@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FaCoins, FaPen, FaTrash, FaPlus } from "react-icons/fa";
 import toast, { Toaster } from "react-hot-toast";
+import dotenv from "dotenv"
+dotenv.config()
+const API_BASE = process.env.API_BASE_URL;
 
 const emptyForm = {
   name: "",
@@ -13,7 +16,6 @@ const emptyForm = {
   bet_end: "",
 };
 
-const API_BASE = "http://localhost:5000";
 
 const BetItemPage = () => {
   const [items, setItems] = useState([]);

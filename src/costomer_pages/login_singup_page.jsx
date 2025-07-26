@@ -3,7 +3,9 @@ import { useState } from "react";
 import axios from "axios";
 import { toast, Toaster } from "react-hot-toast";
 
-const API_BASE = "http://localhost:5000";
+import dotenv from "dotenv"
+dotenv.config()
+const API_BASE = process.env.API_BASE_URL;
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);

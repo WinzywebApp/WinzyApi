@@ -4,7 +4,9 @@ import { toast, Toaster } from "react-hot-toast";
 import { ChevronLeft, Send, CheckCircle, AlertCircle, Timer, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-const API_BASE = 'http://localhost:5000';
+import dotenv from "dotenv"
+dotenv.config()
+const API_BASE = process.env.API_BASE_URL;
 
 export default function EmojiQuizApp() {
   const [questions, setQuestions] = useState([]);

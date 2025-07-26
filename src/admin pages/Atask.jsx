@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FaPlus, FaTrash, FaPen } from "react-icons/fa";
 import toast, { Toaster } from "react-hot-toast";
+import dotenv from "dotenv"
+dotenv.config()
+const API_BASE = process.env.API_BASE_URL;
 
 const TaskManager = () => {
   const [tasks, setTasks] = useState([]);
@@ -22,7 +25,6 @@ const TaskManager = () => {
     headers: { Authorization: `Bearer ${token}` },
   };
 
-  const API_BASE = "http://localhost:5000";
   useEffect(() => {
    
     try {

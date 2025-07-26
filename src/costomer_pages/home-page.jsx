@@ -10,8 +10,9 @@ import {
   FaUserFriends,
 } from "react-icons/fa";
 import { MdCasino } from "react-icons/md";
-
-const API_BASE = "http://localhost:5000";
+import dotenv from "dotenv"
+dotenv.config()
+const API_BASE = process.env.API_BASE_URL;
 
 const sampleWinners = [
   { username: "@Nimsara", image: "https://via.placeholder.com/150" },

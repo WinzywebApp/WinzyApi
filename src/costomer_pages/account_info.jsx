@@ -8,7 +8,9 @@ import toast from "react-hot-toast";
 
 
 
-const API_BASE = "http://localhost:5000"; // ✅ Centralized API base
+import dotenv from "dotenv"
+dotenv.config()
+const API_BASE = process.env.API_BASE_URL;
 
 function AccInfo() {
   const navigate = useNavigate();
