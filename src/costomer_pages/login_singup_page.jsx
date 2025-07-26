@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { toast, Toaster } from "react-hot-toast";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL;  
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -14,36 +14,35 @@ export default function AuthPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      let response;
       if (isLogin) {
-        const res = await axios.post(`${API_BASE}/api/user/login`, {
+        response = await axios.post(`${API_BASE}/api/user/login`, {
           email,
           password,
         });
-        const { token, user, message } = res.data;
-        if (token) {
-          localStorage.setItem("token", token);
-          localStorage.setItem("user", JSON.stringify(user));
-          toast.success(message || "Login successful");
-          setTimeout(() => {
-            window.location.href = "/home";
-          }, 1500);
-        }
       } else {
-        const res = await axios.post(`${API_BASE}/api/user/creat`, {
+        response = await axios.post(`${API_BASE}/api/user/creat`, {
           username,
           email,
           password,
           refaral_from: refaralFrom,
         });
-        const { token, user, message } = res.data;
-        if (token) {
-          localStorage.setItem("token", token);
-          localStorage.setItem("user", JSON.stringify(user));
-          toast.success(message || "Signup successful");
-          setTimeout(() => {
+      }
+
+      const { token, user, message } = response.data;
+
+      if (token && user) {
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
+        toast.success(message || "Success");
+
+        setTimeout(() => {
+          if (user.type === "admin") {
+            window.location.href = "/path/admin-dashbord/winzy";
+          } else {
             window.location.href = "/home";
-          }, 1500);
-        }
+          }
+        }, 1500);
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Something went wrong.");
