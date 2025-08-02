@@ -1,8 +1,14 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-import toast from "react-hot-toast";
-import { FaArrowLeft, FaCheckCircle, FaTimesCircle, FaMoneyBillWave, FaCoins } from "react-icons/fa";
+import toast, { Toaster } from "react-hot-toast";
+import {
+  FaArrowLeft,
+  FaCheckCircle,
+  FaTimesCircle,
+  FaMoneyBillWave,
+  FaCoins,
+} from "react-icons/fa";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
@@ -12,6 +18,7 @@ const OrderPage = () => {
   const passedProduct = location.state?.product;
 
   const product = passedProduct || {
+    product_id: "unknown_product",
     id: "unknown_product",
     name: "Unknown Product",
     quantity: 1,
@@ -26,12 +33,18 @@ const OrderPage = () => {
     address: "",
     city: "",
   });
+  const [submitting, setSubmitting] = useState(false);
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handlePlaceOrder = async () => {
+    if (!form.name || !form.number || !form.address || !form.city) {
+      toast.error("Please fill all your details first.");
+      return;
+    }
+
     const payload = {
       user_address: {
         phone_number: form.number,
@@ -39,13 +52,16 @@ const OrderPage = () => {
         name: form.name,
         district: form.city,
       },
-      quantity: 1,
-      product_id: product.id,
+      quantity: product.quantity || 1,
+      product_id: product.product_id || product.id,
     };
 
+    console.log("Placing order payload:", payload);
+
     try {
+      setSubmitting(true);
       const token = localStorage.getItem("token");
-      await axios.post(`${API_BASE}/api/oder/creat`, payload, {
+      const res = await axios.post(`${API_BASE}/api/oder/creat`, payload, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -55,29 +71,38 @@ const OrderPage = () => {
         icon: <FaCheckCircle className="text-green-600" />,
       });
 
-      setTimeout(() => navigate("/orders"), 1500);
+      setTimeout(() => navigate("/account"), 1500);
     } catch (error) {
-      toast.error("Failed to place order.", {
+      const msg =
+        error.response?.data?.message ||
+        error.response?.data?.massage ||
+        "Failed to place order";
+      toast.error(msg, {
         icon: <FaTimesCircle className="text-red-600" />,
       });
-      console.error("Error placing order:", error);
+      console.error("Error placing order:", error.response?.data || error.message);
+    } finally {
+      setSubmitting(false);
     }
   };
 
   return (
     <div className="min-h-screen bg-blue-100 via-white to-green-50 relative pt-24 pb-28">
+      <Toaster position="top-right" toastOptions={{ duration: 4000 }} />
+
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-30 bg-gradient-to-r from-blue-600 to-blue-500 text-white py-5 px-6 flex justify-center items-center shadow-md">
         <div className="absolute top-4 left-4 z-40">
           <button
             onClick={() => navigate(-1)}
             className="bg-white text-blue-700 p-2 rounded-full shadow hover:scale-105 transition"
+            aria-label="Go back"
           >
             <FaArrowLeft />
           </button>
         </div>
         <h1 className="text-2xl font-semibold tracking-wide flex items-center gap-2">
-          Oder infomation
+          Order Information
         </h1>
       </header>
 
@@ -142,9 +167,10 @@ const OrderPage = () => {
         </div>
         <button
           onClick={handlePlaceOrder}
-          className="bg-blue-600 hover:bg-blue-700 transition-all text-white py-3 px-6 rounded-xl text-lg font-semibold shadow-md"
+          className="bg-blue-600 hover:bg-blue-700 transition-all text-white py-3 px-6 rounded-xl text-lg font-semibold shadow-md disabled:opacity-50 flex items-center gap-2"
+          disabled={submitting}
         >
-          🚀 Place Order
+          {submitting ? "Placing..." : "🚀 Place Order"}
         </button>
       </footer>
     </div>

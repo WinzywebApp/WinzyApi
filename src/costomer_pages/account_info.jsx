@@ -5,6 +5,9 @@ import { FaMoneyBillWave, FaCoins, FaPlus, FaHistory } from "react-icons/fa";
 import axios from "axios";
 import confetti from "canvas-confetti";
 import toast from "react-hot-toast";
+import LoadingScreen from "../components/loading.jsx";
+import { motion } from "framer-motion";
+import { fadeDirection } from "../../vatiation.js"; // fade-left / right
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
@@ -15,6 +18,8 @@ function AccInfo() {
   const [orders, setOrders] = useState([]);
   const [bets, setBets] = useState([]);
   const [betsLoading, setBetsLoading] = useState(false);
+  const [expandedOrderId, setExpandedOrderId] = useState(null);
+  const [expandedBetId, setExpandedBetId] = useState(null);
 
   const copyReferralCode = () => {
     if (user?.refaral_code) {
@@ -36,7 +41,6 @@ function AccInfo() {
         navigate("/login");
       }
     };
-
     fetchUser();
   }, [navigate]);
 
@@ -50,10 +54,10 @@ function AccInfo() {
     const fetchOrders = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get(`${API_BASE}/api/order/viwe`, {
+        const res = await axios.get(`${API_BASE}/api/oder/view`, {
           headers: { Authorization: "Bearer " + token },
         });
-        setOrders(res.data);
+        setOrders(Array.isArray(res.data.orders) ? res.data.orders : []);
       } catch (err) {
         console.error("Error fetching orders:", err);
       }
@@ -63,10 +67,10 @@ function AccInfo() {
       setBetsLoading(true);
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get(`${API_BASE}/api/bets/my-bets`, {
+        const res = await axios.get(`${API_BASE}/api/bets/my-bet`, {
           headers: { Authorization: "Bearer " + token },
         });
-        setBets(res.data.bets || []);
+        setBets(Array.isArray(res.data) ? res.data : []); // assume bets endpoint returns array directly
       } catch (err) {
         if (err.response?.status === 404) {
           setBets([]);
@@ -87,8 +91,141 @@ function AccInfo() {
   }, [filter]);
 
   if (!user) {
-    return <div className="text-center mt-20 font-semibold text-lg">Loading...</div>;
+    return <LoadingScreen />;
   }
+
+  // Order card component
+  const OrderCard = ({ order, idx }) => {
+    const isExpanded = expandedOrderId === order._id;
+    return (
+      <motion.div
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.6 }}
+        variants={fadeDirection("left", idx * 0.1)}
+        key={order._id}
+        className={`p-4 rounded-xl shadow-md flex flex-col gap-2 transition bg-white ${
+          order.order_status === "delivered" ? "border border-green-300" : "border border-rose-300"
+        }`}
+      >
+        <div className="flex items-center gap-4">
+          <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100">
+            {/* placeholder since product image not present in sample; adjust if available */}
+            <img
+              src={
+                order.product_details?.product_image ||
+                "https://via.placeholder.com/64"
+              }
+              alt={order.product_details?.product_name || "Product"}
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <div className="flex-1">
+            <h4 className="font-semibold text-base">
+              {order.product_details?.product_name || "Unknown Product"}
+            </h4>
+            <p className="text-sm">Status: {order.order_status}</p>
+          </div>
+          <div>
+            <button
+              onClick={() =>
+                setExpandedOrderId(isExpanded ? null : order._id)
+              }
+              className="text-blue-600 text-xs font-medium"
+            >
+              {isExpanded ? "Hide details" : "Details"}
+            </button>
+          </div>
+        </div>
+        {isExpanded && (
+          <div className="mt-2 border-t pt-2 text-sm space-y-1">
+            <div>
+              <span className="font-medium">User Email:</span> {order.user_email}
+            </div>
+            <div>
+              <span className="font-medium">Quantity:</span> {order.quantity}
+            </div>
+            <div>
+              <span className="font-medium">Address:</span>{" "}
+              {order.user_address?.name}, {order.user_address?.address_line},{" "}
+              {order.user_address?.district} ({order.user_address?.phone_number})
+            </div>
+            <div>
+              <span className="font-medium">Created:</span>{" "}
+              {new Date(order.order_created_date).toLocaleString()}
+            </div>
+          </div>
+        )}
+      </motion.div>
+    );
+  };
+
+  // Bet card component
+  const BetCard = ({ bet, idx }) => {
+    const isExpanded = expandedBetId === bet._id;
+    // Choose image/name fields with fallback
+    const itemImage =
+      bet.item_image ||
+      bet.product_image ||
+      "https://via.placeholder.com/64";
+    const itemName =
+      bet.item_name || bet.product_name || bet.product_details?.product_name || "Unknown Item";
+
+    return (
+      <motion.div
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.6 }}
+        variants={fadeDirection("right", idx * 0.1)}
+        key={bet._id}
+        className="p-4 rounded-xl shadow-md flex flex-col gap-2 bg-white border border-gray-200 transition"
+      >
+        <div className="flex items-center gap-4">
+          <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100">
+            <img
+              src={itemImage}
+              alt={itemName}
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <div className="flex-1">
+            <h4 className="font-semibold text-base">{itemName}</h4>
+            <p className="text-sm text-gray-600">Bet ID: {bet.bet_id}</p>
+          </div>
+          <div>
+            <button
+              onClick={() => setExpandedBetId(isExpanded ? null : bet._id)}
+              className="text-blue-600 text-xs font-medium"
+            >
+              {isExpanded ? "Hide" : "Details"}
+            </button>
+          </div>
+        </div>
+        {isExpanded && (
+          <div className="mt-2 border-t pt-2 text-sm space-y-1">
+            <div>
+              <span className="font-medium">User Email:</span> {bet.user_email}
+            </div>
+            <div>
+              <span className="font-medium">Product ID:</span> {bet.product_id || bet.item_id}
+            </div>
+            <div>
+              <span className="font-medium">Placed At:</span>{" "}
+              {new Date(bet.placed_at || bet.created_at).toLocaleString()}
+            </div>
+            {/* If there are more nested details like user_address */}
+            {bet.user_address && (
+              <div>
+                <span className="font-medium">Address:</span>{" "}
+                {bet.user_address.name}, {bet.user_address.address_line},{" "}
+                {bet.user_address.city} ({bet.user_address.contact_number})
+              </div>
+            )}
+          </div>
+        )}
+      </motion.div>
+    );
+  };
 
   return (
     <div className="min-h-screen w-full p-0 m-0 bg-gradient-to-b from-blue-50 via-green-50 to-white">
@@ -112,7 +249,6 @@ function AccInfo() {
             <h2 className="text-lg font-semibold mt-1">@{user.username}</h2>
           </div>
 
-          {/* Footer Info */}
           <div className="absolute bottom-2 left-4 text-sm font-bold flex items-center gap-1">
             <FaMoneyBillWave className="text-white" /> {user.main_balance}
           </div>
@@ -193,25 +329,8 @@ function AccInfo() {
             orders.length === 0 ? (
               <div className="text-center text-gray-600">No orders found.</div>
             ) : (
-              orders.map((order) => (
-                <div
-                  key={order.id}
-                  className={`p-4 rounded-xl shadow-md flex items-center gap-4 ${
-                    order.status === "delivered"
-                      ? "bg-green-200"
-                      : "bg-rose-200"
-                  }`}
-                >
-                  <img
-                    src={order.productImage}
-                    alt={order.productName}
-                    className="w-16 h-16 rounded-lg object-cover"
-                  />
-                  <div>
-                    <h4 className="font-semibold text-base">{order.productName}</h4>
-                    <p className="text-sm">Status: {order.status}</p>
-                  </div>
-                </div>
+              orders.map((order, idx) => (
+                <OrderCard key={order._id} order={order} idx={idx} />
               ))
             )
           ) : betsLoading ? (
@@ -219,23 +338,8 @@ function AccInfo() {
           ) : bets.length === 0 ? (
             <div className="text-center text-gray-600">No bets found.</div>
           ) : (
-            bets.map((bet) => (
-              <div
-                key={bet._id}
-                className={`p-4 rounded-xl shadow-md flex items-center gap-4 ${
-                  bet.status === "won" ? "bg-green-200" : "bg-rose-200"
-                }`}
-              >
-                <img
-                  src={bet.image}
-                  alt={bet.name}
-                  className="w-16 h-16 rounded-lg object-cover"
-                />
-                <div>
-                  <h4 className="font-semibold text-base">{bet.name}</h4>
-                  <p className="text-sm">Status: {bet.status}</p>
-                </div>
-              </div>
+            bets.map((bet, idx) => (
+              <BetCard key={bet._id} bet={bet} idx={idx} />
             ))
           )}
         </div>

@@ -52,7 +52,7 @@ const ProductPage = () => {
       {/* Product Card */}
       <section className="bg-white rounded-2xl overflow-hidden shadow-md mt-4 mx-4">
         {/* Image */}
-        <div className="bg-gray-100 flex justify-center items-center h-64">
+        <div className="bg-blue-500 flex justify-center items-center h-64">
           <img
             src={product.image}
             alt={product.name}
@@ -61,7 +61,7 @@ const ProductPage = () => {
         </div>
 
         {/* Info */}
-        <div className="p-5 space-y-4">
+        <div className="p-5 space-y-4 bg-blue-200">
           <div className="flex justify-between items-center">
             <h2 className="text-2xl font-semibold text-gray-800">
               {product.name}
@@ -71,13 +71,9 @@ const ProductPage = () => {
           <p className="text-gray-600 text-sm">{product.description}</p>
 
           <div className="grid grid-cols-2 gap-4 mt-4">
-            <div className="flex items-center gap-2 text-yellow-600 font-semibold">
+            <div className="flex items-center gap-2 text-black font-semibold">
               <FaCoins />
               Coins: {product.coin_price}
-            </div>
-            <div className="flex items-center gap-2 text-green-600 font-semibold">
-              <FaMoneyBillWave />
-              Rs. {product.main_price}
             </div>
           </div>
         </div>

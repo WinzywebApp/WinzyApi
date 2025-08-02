@@ -11,10 +11,11 @@ const AdminProductPage = () => {
     name: "",
     description: "",
     image: "",
-    coin_price: 0,
+    point_price: 0,   // renamed to match backend
     main_price: 0,
     category: "tech",
     product_type: "a",
+    quantity: 0,
   });
   const [showForm, setShowForm] = useState(false);
   const [editId, setEditId] = useState(null);
@@ -44,35 +45,69 @@ const AdminProductPage = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    // Convert numeric inputs to number type
+    const val =
+      ["point_price", "main_price", "quantity"].includes(name) && value !== ""
+        ? Number(value)
+        : value;
+    setFormData((prev) => ({ ...prev, [name]: val }));
   };
 
   const handleSubmit = async () => {
     const token = localStorage.getItem("token");
     if (!token) return toast.error("Token not found");
 
-    const config = { headers: { Authorization: `Bearer ${token}` } };
+    if (!formData.name || !formData.description) {
+      return toast.error("Name and Description are required");
+    }
+
     try {
       if (editId) {
-        await axios.put(`${API_BASE}/api/product/update/${editId}`, formData, config);
+        // Exclude product_id from body
+        const { product_id, ...dataToSend } = formData;
+
+        await axios.put(`${API_BASE}/api/product/edite/${editId}`, dataToSend, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         toast.success("📝 Product updated");
       } else {
-        await axios.post(`${API_BASE}/api/product/creat`, formData, config);
+        await axios.post(`${API_BASE}/api/product/creat`, formData, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         toast.success("🎁 Product added");
       }
       fetchProducts();
       setShowForm(false);
       setFormData({
-        name: "", description: "", image: "", coin_price: 0, main_price: 0, category: "tech", product_type: "a"
+        name: "",
+        description: "",
+        image: "",
+        point_price: 0,
+        main_price: 0,
+        category: "tech",
+        product_type: "a",
+        quantity: 0,
       });
       setEditId(null);
     } catch (err) {
+      console.error("Submit error:", err.response?.data || err.message);
       toast.error("❌ Error submitting product");
     }
   };
 
   const handleEdit = (product) => {
-    setFormData(product);
+    setFormData({
+      name: product.name || "",
+      description: product.description || "",
+      image: product.image || "",
+      point_price: product.point_price || 0,
+      main_price: product.main_price || 0,
+      category: product.category || "tech",
+      product_type: product.product_type || "a",
+      quantity: product.quantity || 0,
+      // product_id is kept separate for edit reference
+      product_id: product.product_id,
+    });
     setEditId(product.product_id);
     setShowForm(true);
   };
@@ -96,19 +131,33 @@ const AdminProductPage = () => {
       <h2 className="text-2xl font-bold text-center mb-4">🎯 Admin Product Manager</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {products.map((product) => (
-          <div key={product.product_id} className="relative group rounded-xl border bg-white shadow-lg hover:shadow-2xl transition duration-300">
+          <div
+            key={product.product_id}
+            className="relative group rounded-xl border bg-white shadow-lg hover:shadow-2xl transition duration-300"
+          >
             <div className="overflow-hidden rounded-t-xl">
-              <img src={product.image} alt={product.name} className="h-44 w-full object-cover group-hover:scale-105 transition duration-300" />
+              <img
+                src={product.image}
+                alt={product.name}
+                className="h-44 w-full object-cover group-hover:scale-105 transition duration-300"
+              />
             </div>
             <div className="p-4 space-y-2">
               <h3 className="font-bold text-lg text-gray-800 truncate">{product.name}</h3>
               <p className="text-gray-500 text-sm line-clamp-2">{product.description}</p>
               <div className="flex justify-between text-sm text-gray-600">
-                <span>📦 Type: <strong>{product.product_type}</strong></span>
-                <span>📁 Cat: <strong>{product.category}</strong></span>
+                <span>
+                  📦 Type: <strong>{product.product_type}</strong>
+                </span>
+                <span>
+                  📁 Cat: <strong>{product.category}</strong>
+                </span>
               </div>
-              <div className="flex items-center gap-2 text-yellow-600 font-semibold text-md mt-1">
-                <FaCoins className="inline-block" /> {product.coin_price} 🪙 | Rs.{product.main_price}
+              <div className="flex justify-between text-sm text-gray-600">
+                <span>🔢 Quantity: {product.quantity}</span>
+                <span className="flex items-center gap-1 text-yellow-600 font-semibold text-md mt-1">
+                  <FaCoins /> {product.point_price} 🪙 | Rs.{product.main_price}
+                </span>
               </div>
             </div>
             <div className="absolute top-2 right-2 flex gap-2">
@@ -129,7 +178,14 @@ const AdminProductPage = () => {
           setShowForm(true);
           setEditId(null);
           setFormData({
-            name: "", description: "", image: "", coin_price: 0, main_price: 0, category: "tech", product_type: "a"
+            name: "",
+            description: "",
+            image: "",
+            point_price: 0,
+            main_price: 0,
+            category: "tech",
+            product_type: "a",
+            quantity: 0,
           });
         }}
         className="fixed bottom-4 right-4 bg-blue-600 text-white p-3 rounded-full shadow hover:bg-blue-700"
@@ -142,26 +198,81 @@ const AdminProductPage = () => {
         <div className="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-xl w-full max-w-md space-y-4">
             <h3 className="text-xl font-semibold">{editId ? "🛠️ Edit Product" : "➕ Add Product"}</h3>
-            <input name="name" value={formData.name} onChange={handleChange} placeholder="Name" className="w-full p-2 border rounded" />
-            <input name="description" value={formData.description} onChange={handleChange} placeholder="Description" className="w-full p-2 border rounded" />
-            <input name="image" value={formData.image} onChange={handleChange} placeholder="Image URL" className="w-full p-2 border rounded" />
+            <input
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="Name"
+              className="w-full p-2 border rounded"
+            />
+            <input
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              placeholder="Description"
+              className="w-full p-2 border rounded"
+            />
+            <input
+              name="image"
+              value={formData.image}
+              onChange={handleChange}
+              placeholder="Image URL"
+              className="w-full p-2 border rounded"
+            />
             <div className="flex gap-2">
-              <input name="coin_price" type="number" value={formData.coin_price} onChange={handleChange} placeholder="Coins" className="w-1/2 p-2 border rounded" />
-              <input name="main_price" type="number" value={formData.main_price} onChange={handleChange} placeholder="Main Rs." className="w-1/2 p-2 border rounded" />
+              <input
+                name="point_price"
+                type="number"
+                value={formData.point_price}
+                onChange={handleChange}
+                placeholder="Coins"
+                className="w-1/3 p-2 border rounded"
+                min={0}
+              />
+              <input
+                name="main_price"
+                type="number"
+                value={formData.main_price}
+                onChange={handleChange}
+                placeholder="Main Rs."
+                className="w-1/3 p-2 border rounded"
+                min={0}
+              />
+              <input
+                name="quantity"
+                type="number"
+                value={formData.quantity}
+                onChange={handleChange}
+                placeholder="Quantity"
+                className="w-1/3 p-2 border rounded"
+                min={0}
+              />
             </div>
             <div className="flex gap-2">
-              <select name="category" value={formData.category} onChange={handleChange} className="w-1/2 p-2 border rounded">
+              <select
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                className="w-1/2 p-2 border rounded"
+              >
                 <option value="tech">Tech</option>
                 <option value="beauty">Beauty</option>
                 <option value="perfume">Perfume</option>
               </select>
-              <select name="product_type" value={formData.product_type} onChange={handleChange} className="w-1/2 p-2 border rounded">
+              <select
+                name="product_type"
+                value={formData.product_type}
+                onChange={handleChange}
+                className="w-1/2 p-2 border rounded"
+              >
                 <option value="a">A</option>
                 <option value="b">B</option>
               </select>
             </div>
             <div className="flex justify-end gap-2">
-              <button onClick={() => setShowForm(false)} className="px-4 py-2 bg-gray-300 rounded">Cancel</button>
+              <button onClick={() => setShowForm(false)} className="px-4 py-2 bg-gray-300 rounded">
+                Cancel
+              </button>
               <button onClick={handleSubmit} className="px-4 py-2 bg-blue-600 text-white rounded">
                 {editId ? "Update" : "Add"}
               </button>

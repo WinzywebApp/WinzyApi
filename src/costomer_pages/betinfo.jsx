@@ -46,7 +46,7 @@ const BetPage = () => {
         icon: <FaCheckCircle className="text-green-600" />,
       });
 
-      setTimeout(() => navigate("/bets"), 1500);
+      setTimeout(() => navigate("/account"), 1500);
     } catch (err) {
       toast.error("Failed to place bet", {
         icon: <FaTimesCircle className="text-red-600" />,

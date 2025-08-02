@@ -13,6 +13,7 @@ import BetItems from "../admin pages/Abetitem.jsx";
 import EmojiQuestions from "../admin pages/Aquiz.jsx";
 import Tasks from "../admin pages/Atask.jsx";
 import Wallet from "../admin pages/wallet.jsx";
+import Main from "../admin pages/mainpage.jsx"
 
 const AdminDashboard = () => {
   const [activePage, setActivePage] = useState("gift");
@@ -24,6 +25,8 @@ const AdminDashboard = () => {
     emoji: <EmojiQuestions />,
     task: <Tasks />,
     wallet: <Wallet />,
+    main:<Main/>
+
   };
 
   const navItems = [
@@ -33,6 +36,7 @@ const AdminDashboard = () => {
     { key: "emoji", label: "Emoji Quiz", icon: <HiLightBulb className="text-2xl" /> },
     { key: "task", label: "Tasks", icon: <HiClipboardList className="text-2xl" /> },
     { key: "wallet", label: "Wallet", icon: <HiCash className="text-2xl" /> },
+    { key: "main", label: "wallet", icon: <HiCash className="text-2xl" /> },
   ];
 
   return (
