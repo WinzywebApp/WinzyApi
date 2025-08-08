@@ -52,13 +52,13 @@ const ProductPage = () => {
       {/* Product Card */}
       <section className="bg-white rounded-2xl overflow-hidden shadow-md mt-4 mx-4">
         {/* Image */}
-        <div className="bg-blue-500 flex justify-center items-center h-64">
-          <img
-            src={product.image}
-            alt={product.name}
-            className="h-full object-contain drop-shadow-lg"
-          />
-        </div>
+        <div className="bg-blue-500 flex justify-center items-center p-4">
+       <img
+        src={product.image}
+        alt={product.name}
+        className="w-[300px] h-[300px] object-cover drop-shadow-lg rounded-lg"
+       />
+         </div>
 
         {/* Info */}
         <div className="p-5 space-y-4 bg-blue-200">

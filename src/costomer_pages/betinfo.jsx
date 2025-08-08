@@ -18,25 +18,41 @@ const BetPage = () => {
     city: "",
   });
 
+  const [loading, setLoading] = useState(false);
+
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handlePlaceBet = async () => {
+    if (!form.name || !form.number || !form.address || !form.city) {
+      toast.error("Please fill all fields", {
+        icon: <FaTimesCircle className="text-red-600" />,
+      });
+      return;
+    }
+    if (!product || !product.product_id) {
+      toast.error("Product data missing", {
+        icon: <FaTimesCircle className="text-red-600" />,
+      });
+      return;
+    }
+
     const payload = {
+      product_id: product.product_id,
+      quantity: 1, // adjust if you allow multiple bets per click
       user_address: {
+        name: form.name,
         phone_number: form.number,
         address_line: form.address,
-        name: form.name,
         district: form.city,
       },
-      quantity: 1,
-      product_id: product?.product_id,
     };
 
     try {
+      setLoading(true);
       const token = localStorage.getItem("token");
-      await axios.post(`${API_BASE}/api/bets/place`, payload, {
+      const res = await axios.post(`${API_BASE}/api/bets/place`, payload, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -46,12 +62,16 @@ const BetPage = () => {
         icon: <FaCheckCircle className="text-green-600" />,
       });
 
+      // Optionally you can show returned bet summary before redirect
       setTimeout(() => navigate("/account"), 1500);
     } catch (err) {
-      toast.error("Failed to place bet", {
+      const msg = err.response?.data?.message || "Failed to place bet";
+      toast.error(msg, {
         icon: <FaTimesCircle className="text-red-600" />,
       });
-      console.error(err);
+      console.error("Place bet error:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -74,7 +94,7 @@ const BetPage = () => {
       </header>
 
       {/* Product Details */}
-      <div className="bg-white shadow rounded-xl p-5 mb-6 flex gap-4 items-center">
+      <div className="bg-white shadow rounded-xl p-5 mb-6 flex gap-4 items-center mt-16">
         <img
           src={product.image}
           alt={product.name}
@@ -84,7 +104,7 @@ const BetPage = () => {
           <h2 className="text-lg font-semibold text-gray-800">{product.name}</h2>
           <p className="text-gray-500 text-sm mt-1">{product.description}</p>
           <div className="flex items-center gap-2 mt-2 font-semibold text-yellow-600">
-            <FaCoins /> {product.coin_price} Coins
+            <FaCoins />   { product.main_price} 
           </div>
         </div>
       </div>
@@ -125,13 +145,14 @@ const BetPage = () => {
       {/* Place Bet Button */}
       <footer className="fixed bottom-0 left-0 right-0 bg-white border-t p-4 z-40 flex justify-between items-center">
         <div className="text-yellow-700 font-bold flex items-center gap-1 text-lg">
-          <FaCoins /> {product.coin_price} Coins
+          <FaCoins /> {product.main_price} 
         </div>
         <button
           onClick={handlePlaceBet}
-          className="bg-blue-600 text-white px-6 py-2 rounded-full shadow hover:bg-blue-700"
+          disabled={loading}
+          className="bg-blue-600 text-white px-6 py-2 rounded-full shadow hover:bg-blue-700 disabled:opacity-50"
         >
-          🚀 Place Bet
+          {loading ? "Placing..." : "🚀 Place Bet"}
         </button>
       </footer>
     </div>

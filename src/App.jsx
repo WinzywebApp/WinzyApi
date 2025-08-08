@@ -17,6 +17,10 @@ import BetItemsGrid from "./costomer_pages/bets.jsx";
 import BetPage from "./costomer_pages/betinfo.jsx";
 import AdminDashboard from "./admin pages/admin.jsx";
 import UserWalletHistoryPage from "./costomer_pages/wallethostory.jsx";
+import  {ContactPage } from "./menu/contact.jsx"
+import {PrivacyPolicyPage } from "./menu/privasy_police.jsx"
+import{TermsConditionsPage} from "./menu/terms&conditions.jsx"
+
 
 
 function App() {
@@ -24,6 +28,7 @@ function App() {
     <div className="">
       <BrowserRouter>
         <Toaster position="top-center" /> 
+       
         <Routes>
           <Route path="/*" element={<AuthPage />} />
           <Route path="/home" element={<HomePage />} />
@@ -41,6 +46,9 @@ function App() {
            <Route path="/bet" element={<BetPage/>}/>
            <Route path="/wallet/history" element={<UserWalletHistoryPage/>}/>
            <Route path="/path/admin-dashbord/winzy" element={<AdminDashboard/>}/>
+           <Route path="/contact" element={<ContactPage />} />
+           <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+           <Route path="/terms-conditions" element={<TermsConditionsPage />} />
         </Routes>
       </BrowserRouter>
     </div>

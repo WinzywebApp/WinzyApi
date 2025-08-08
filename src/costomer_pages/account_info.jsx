@@ -7,7 +7,8 @@ import confetti from "canvas-confetti";
 import toast from "react-hot-toast";
 import LoadingScreen from "../components/loading.jsx";
 import { motion } from "framer-motion";
-import { fadeDirection } from "../../vatiation.js"; // fade-left / right
+import { fadeDirection } from "../../vatiation.js"; 
+import { Link } from "react-router-dom";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
@@ -104,7 +105,7 @@ function AccInfo() {
         viewport={{ once: true, amount: 0.6 }}
         variants={fadeDirection("left", idx * 0.1)}
         key={order._id}
-        className={`p-4 rounded-xl shadow-md flex flex-col gap-2 transition bg-white ${
+        className={`p-4 rounded-xl shadow-md flex flex-col gap-2 transition bg-blue-100 ${
           order.order_status === "delivered" ? "border border-green-300" : "border border-rose-300"
         }`}
       >
@@ -125,6 +126,7 @@ function AccInfo() {
               {order.product_details?.product_name || "Unknown Product"}
             </h4>
             <p className="text-sm">Status: {order.order_status}</p>
+            <p className="text-sm">Status: {order.order_id}</p>
           </div>
           <div>
             <button
@@ -178,10 +180,10 @@ function AccInfo() {
         viewport={{ once: true, amount: 0.6 }}
         variants={fadeDirection("right", idx * 0.1)}
         key={bet._id}
-        className="p-4 rounded-xl shadow-md flex flex-col gap-2 bg-white border border-gray-200 transition"
+        className="p-4 rounded-xl shadow-md flex flex-col gap-2 bg-blue-100 border border-gray-200 transition"
       >
         <div className="flex items-center gap-4">
-          <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100">
+          <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-blue-50">
             <img
               src={itemImage}
               alt={itemName}
@@ -189,8 +191,9 @@ function AccInfo() {
             />
           </div>
           <div className="flex-1">
-            <h4 className="font-semibold text-base">{itemName}</h4>
-            <p className="text-sm text-gray-600">Bet ID: {bet.bet_id}</p>
+            <h4 className="font-semibold text-base">{itemName}</h4> 
+            <p className="text-sm text-gray-600">Bet CODE: {bet.code}</p>
+            
           </div>
           <div>
             <button
@@ -228,16 +231,21 @@ function AccInfo() {
   };
 
   return (
+     <div className="w-full max-w-full mx-auto rounded-none overflow-hidden shadow-xl bg-white relative">
+      {/* Back Button */}
+      <div className="absolute top-4 left-4 z-10">
+        <button
+          onClick={() => navigate("/home")}
+          className="flex items-center gap-1 bg-white shadow px-3 py-1.5 rounded-full text-sm font-medium text-gray-700 hover:bg-gray-100"
+        >
+          <ArrowLeft size={16} />
+          
+        </button>
+      </div>
     <div className="min-h-screen w-full p-0 m-0 bg-gradient-to-b from-blue-50 via-green-50 to-white">
       <div className="w-full max-w-full mx-auto rounded-none overflow-hidden shadow-xl bg-white">
         {/* Header */}
         <div className="bg-blue-500 text-white relative w-full h-[30vh] rounded-b-[30px]">
-          <button
-            className="absolute top-4 left-4 bg-white p-2 rounded-full shadow"
-            onClick={() => navigate(-1)}
-          >
-            <ArrowLeft className="text-blue-500" />
-          </button>
           <div className="flex flex-col items-center justify-center h-full relative">
             <div className="relative">
               <img
@@ -344,6 +352,7 @@ function AccInfo() {
           )}
         </div>
       </div>
+    </div>
     </div>
   );
 }

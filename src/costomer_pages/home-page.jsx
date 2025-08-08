@@ -7,13 +7,18 @@ import {
   FaGift,
   FaVideo,
   FaQuestionCircle,
-  FaUserFriends,
   FaCoins,
+  FaTelegram,
+  FaFacebook,
+  FaTiktok,
+  FaTasks,
+  FaHandPaper,
 } from "react-icons/fa";
-import { MdCasino } from "react-icons/md";
+import {IoTicket} from "react-icons/io5"
 import { motion, AnimatePresence } from "framer-motion";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL ;
+
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 const axiosInstance = axios.create();
 axiosInstance.interceptors.request.use((config) => {
@@ -25,7 +30,6 @@ axiosInstance.interceptors.request.use((config) => {
   return config;
 });
 
-// animation variants
 const slideFadeLeft = {
   hidden: { x: -50, opacity: 0 },
   visible: { x: 0, opacity: 1 },
@@ -48,6 +52,7 @@ function HomePage() {
   const [orders, setOrders] = useState([]);
   const [currentOrderIndex, setCurrentOrderIndex] = useState(0);
   const [prevOrderIndex, setPrevOrderIndex] = useState(null);
+  const [showMenu, setShowMenu] = useState(false);
   const navigate = useNavigate();
   const intervalRef = useRef(null);
 
@@ -118,24 +123,84 @@ function HomePage() {
 
   const features = [
     { icon: <FaVideo className="text-pink-500 text-2xl" />, label: "Video Earn", route: "/watch" },
-    { icon: <MdCasino className="text-orange-500 text-2xl" />, label: "Lucky Spin", route: "/spin" },
+    { icon: <FaHandPaper className="text-orange-500 text-2xl" />, label: "Lucky Spin", route: "/spin" },
     { icon: <FaGift className="text-blue-500 text-2xl" />, label: "Gift Code", route: "/redeem" },
     { icon: <FaQuestionCircle className="text-green-500 text-2xl" />, label: "Quizzes", route: "/quize" },
-    { icon: <FaUserFriends className="text-purple-500 text-2xl" />, label: "Bet Items", route: "/bet-item" },
-    { icon: <FaUserCircle className="text-yellow-500 text-2xl" />, label: "Tasks", route: "/task" },
+    { icon: <IoTicket className="text-purple-500 text-2xl" />, label: "Bet Items", route: "/bet-item" },
+    { icon: <FaTasks className="text-yellow-500 text-2xl" />, label: "Tasks", route: "/task" },
   ];
 
   return (
-    <div className="min-h-screen pb-20 relative overflow-x-hidden bg-white ">
+    <div className="min-h-screen pb-20 relative overflow-x-hidden bg-white">
       {/* Navbar */}
-      <div className="fixed top-0 left-0 z-40 w-full h-16 bg-blue-400 rounded-r-2xl flex items-center justify-between px-4 text-white shadow-md">
-        <FaBars className="w-6 h-6" />
-        <h1 className="text-lg font-bold font-poppins">MyLogo</h1>
+      <div className="fixed top-0 left-0 z-40 w-full h-16 bg-blue-500 rounded-r-2xl flex items-center justify-between px-4 text-white shadow-md">
+        <FaBars className="w-6 h-6 cursor-pointer" onClick={() => setShowMenu(!showMenu)} />
+        <img src="/logo.png" alt="Logo" className="h-[35px] w-[110px] object-contain" />
         <FaUserCircle className="w-7 h-7 cursor-pointer" onClick={() => navigate("/account")} />
       </div>
       <div className="h-16" />
 
-      {/* Winner Card Slider */}
+      {/* Slide out menu with backdrop */}
+<AnimatePresence>
+  {showMenu && (
+    <>
+      {/* Backdrop - clicking it will close the menu */}
+      <motion.div
+        className="fixed inset-0 bg-black bg-opacity-40 z-40"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={() => setShowMenu(false)}
+      />
+
+      {/* Side Menu */}
+      <motion.div
+        className="fixed top-0 left-0 h-full w-[250px] bg-blue-500 text-white z-50 shadow-lg p-4 flex flex-col justify-between"
+        initial={{ x: -250 }}
+        animate={{ x: 0 }}
+        exit={{ x: -250 }}
+        transition={{ duration: 0.3 }}
+      >
+        <div>
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-xl font-bold text-center w-full">Menu</h2>
+            <button onClick={() => setShowMenu(false)} className="text-white text-xl  absolute right-4 top-4">
+              ×
+            </button>
+          </div>
+          <ul className="space-y-4">
+            <li>
+              <button onClick={() => { navigate("/contact"); setShowMenu(false); }}>
+                Contact
+              </button>
+            </li>
+            <li>
+              <button onClick={() => { navigate("/privacy-policy"); setShowMenu(false); }}>
+                Privacy Policy
+              </button>
+            </li>
+            <li>
+              <button onClick={() => { navigate("/terms-conditions"); setShowMenu(false); }}>
+                Terms & Conditions
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <div className="flex justify-around py-4">
+          <FaTelegram className="text-white text-2xl cursor-pointer" />
+          <FaTiktok className="text-white text-2xl cursor-pointer" />
+          <FaFacebook className="text-white text-2xl cursor-pointer" />
+        </div>
+
+        <p className="text-center text-xs mt-4">© 2025 All rights reserved</p>
+      </motion.div>
+    </>
+  )}
+</AnimatePresence>
+
+
+       {/* Winner Card Slider */}
       <motion.div
         initial="hidden"
         animate="visible"
@@ -252,7 +317,7 @@ function HomePage() {
         className="p-4 grid grid-cols-2 gap-4 max-w-md mx-auto"
       >
         {products.map((product) => {
-          const qty = product?.quantity ?? product?.stock ?? 0;
+          const qty = product?.quantaty ?? product?.stock ?? 0;
           const hasStock = qty > 0;
           return (
             <motion.div
@@ -303,14 +368,20 @@ function HomePage() {
           );
         })}
       </motion.div>
+      <script type='text/javascript' src='//pl27372407.profitableratecpm.com/a7/dd/7c/a7dd7c35c350fb13d330fffd5ed65314.js'></script>
     </div>
+     
   );
 }
 
-// WinnerCard component
+
+      {/* Existing WinnerCard, Features, Categories, Products (unchanged) */}
+      {/* ... */}
+
+
 function WinnerCard({ order }) {
   const productImage = order?.product_details?.product_image || "/default.png";
-  const userEmail = order?.user_email || "Unknown User";
+  const userEmail = order?.user_name || "Unknown User";
 
   return (
     <div className="bg-blue-400 rounded-xl shadow-lg flex items-center gap-4 p-4 w-full border border-indigo-300">

@@ -69,8 +69,7 @@ export default function EmojiQuizApp() {
       if (correct) {
         toast.success(
           <>
-            <CheckCircle className="inline mr-1" size={20} /> Correct! +{reward} coins <br />
-            🪙 Balance: {coin_balance} <br />
+            <CheckCircle className="inline mr-1" size={20} /> Correct! +{reward} coins ,
             ⏳ Attempts left: {attempts_remaining} / 10
           </>
         );
@@ -105,7 +104,7 @@ export default function EmojiQuizApp() {
   }
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen bg-blue-100 flex flex-col">
       <Toaster position="top-center" />
 
       {/* ✅ Beautiful Header */}
@@ -117,30 +116,30 @@ export default function EmojiQuizApp() {
         >
           <ArrowLeft className="w-5 h-5" />
         </button>
-        <h1 className="text-lg font-semibold text-blue-700 text-center">
+        <h1 className="text-lg font-semibold text-blue-500 text-center">
           🎯 Emoji Quiz
         </h1>
       </header>
 
       {/* Main White Box */}
-      <div className="flex-1 flex flex-col items-center justify-start bg-white px-4 pt-6">
+      <div className="flex-1 flex flex-col items-center justify-start bg-blue-100 px-4 pt-6">
         {/* Top Center Title */}
-        <p className="text-blue-800 font-semibold text-center text-md mb-4">
+        <p className="text-gray-800 font-semibold text-center text-md mb-4">
           Test your knowledge!
         </p>
 
         {/* Emoji Quiz Box */}
-        <div className="w-full max-w-md bg-blue-100 border-2 border-blue-500 rounded-2xl p-6 shadow space-y-4">
-          <div className="text-5xl h-24 flex items-center justify-center text-blue-900 font-bold">
+        <div className="w-full max-w-md bg-gray-100 border-2 border-blue-500 rounded-2xl p-6 shadow space-y-4">
+          <div className="text-5xl h-24 flex items-center justify-center text-gray-900 font-bold">
             {currentQ.emoji_clue || "❓"}
           </div>
-          <div className="flex items-center justify-center text-blue-800 gap-2 text-sm">
+          <div className="flex items-center justify-center text-gray-800 gap-2 text-sm">
             <Timer size={16} /> {timeLeft}s left
           </div>
         </div>
 
         {/* Hint */}
-        <p className="text-sm text-blue-600 mt-3 italic">
+        <p className="text-sm text-gray-600 mt-3 italic">
           Hint: {currentQ.hint || "No hint available"}
         </p>
 
@@ -154,7 +153,7 @@ export default function EmojiQuizApp() {
               ${
                 feedbackColor
                   ? `border-${feedbackColor} ring-2 ring-${feedbackColor}`
-                  : "border-blue-300 focus:ring-2 focus:ring-blue-400"
+                  : "border-gray-800 focus:ring-2 focus:ring-white"
               }`}
           />
           <button

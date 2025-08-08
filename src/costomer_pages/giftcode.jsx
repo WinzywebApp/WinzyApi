@@ -41,7 +41,7 @@ const GiftRedeem = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex flex-col">
+    <div className="min-h-screen bg-blue-100 flex flex-col">
       {/* Header */}
       <header className="w-full bg-white px-4 py-3 shadow-sm sticky top-0 z-10 flex items-center justify-center relative rounded-b-2xl">
         <button

@@ -3,15 +3,20 @@ import axios from "axios";
 import {
   FaClock,
   FaCheck,
-  FaMoneyBill,
   FaArrowLeft,
   FaTimes,
 } from "react-icons/fa";
+import {
+  FiUser,
+  FiClock as FiClock2,
+  FiCreditCard,
+  FiCheckCircle,
+} from "react-icons/fi";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import LoadingScreen from "../components/loading.jsx";
 import { useNavigate } from "react-router-dom";
-import { fadeDirection } from "../../vatiation.js"; 
+import { fadeDirection } from "../../vatiation.js";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
@@ -45,6 +50,8 @@ const RequestCard = memo(function RequestCard({
   cancelling,
   cancelRequest,
 }) {
+  const isPending = r.status === "pending";
+
   return (
     <motion.div
       key={r.request_id}
@@ -55,83 +62,51 @@ const RequestCard = memo(function RequestCard({
       variants={fadeDirection(idx % 2 === 0 ? "left" : "right", idx * 0.1)}
       className="relative bg-gradient-to-br from-blue-600 to-blue-500 rounded-2xl shadow-xl border border-transparent p-[1px] overflow-hidden"
     >
-      <div className="relative bg-blue-500 rounded-xl p-5 space-y-4 overflow-hidden flex flex-col">
-        <div className="absolute inset-0 pointer-events-none rounded-xl bg-gradient-to-br from-white/10 via-transparent to-white/0 mix-blend-overlay" />
+      <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-md hover:shadow-lg transition-all duration-200 space-y-3">
+        <div className="flex items-center justify-between text-sm text-gray-600">
+          <div className="flex items-center gap-2">
+            <FiUser className="w-4 h-4 text-gray-500" />
+            <span className="font-medium">{r.username || "Unknown"}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <FiClock2 className="w-4 h-4 text-gray-500" />
+            <span>{formatDateTime(r.created_at)}</span>
+          </div>
+        </div>
 
-        <div className="absolute top-3 right-3 flex items-center">
+        <div className="flex items-center justify-between text-base font-semibold text-gray-700">
+          <div className="flex items-center gap-2 text-blue-600">
+            <FiCreditCard className="w-5 h-5" />
+            LKR {r.amount}
+          </div>
           <StatusBadge status={r.status} />
         </div>
 
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div className="flex items-center gap-3 flex-1 min-w-0">
-            <div className="bg-white p-3 rounded-full shadow-md flex-shrink-0">
-              <FaMoneyBill className="text-green-500 w-5 h-5" aria-hidden="true" />
-            </div>
-            <div className="truncate">
-              <div className="text-white font-bold text-lg flex flex-wrap gap-2">
-                <span>
-                  LKR <span className="prose-sm">{r.amount?.toLocaleString()}</span>
-                </span>
-                <span className="text-sm opacity-80 truncate">({r.username || ""})</span>
-              </div>
-              <div className="text-white text-sm flex items-center gap-1 mt-1">
-                <FaClock aria-hidden="true" />
-                <span className="truncate">{formatDateTime(r.created_at)}</span>
-              </div>
-            </div>
-          </div>
+        {isPending && (
+          <>
+            <button
+              disabled={cancelling[r.request_id]}
+              onClick={() => cancelRequest(r.request_id)}
+              className="mt-2 inline-flex items-center gap-1 px-3 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-600 disabled:opacity-50"
+            >
+              {cancelling[r.request_id] ? "Cancelling..." : (
+                <>
+                  <FaTimes /> Cancel Request
+                </>
+              )}
+            </button>
 
-          <div className="flex flex-col items-end gap-2 flex-shrink-0">
-            {r.status !== "accepted" && (
+            {/* Extra button with explicit request_id parameter */}
+            <div className="mt-2">
               <button
-                disabled={!!cancelling[r.request_id]}
                 onClick={() => cancelRequest(r.request_id)}
-                className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-xs font-medium disabled:opacity-50 transition"
-                aria-label="Cancel request"
+                className="text-xs text-red-500 underline hover:text-red-700"
               >
-                {cancelling[r.request_id] ? (
-                  <svg
-                    className="w-4 h-4 animate-spin"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                    ></path>
-                  </svg>
-                ) : (
-                  <FaTimes className="w-3 h-3" aria-hidden="true" />
-                )}
-                Cancel
+                ❌ Cancel this request
               </button>
-            )}
-          </div>
-        </div>
-
-        <div className="text-xs text-blue-100 flex flex-wrap gap-3 mt-1">
-          <div className="flex items-center gap-1">
-            <span className="font-medium">Request ID:</span>{" "}
-            <span className="truncate">{r.request_id}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <span className="font-medium">Detail URL:</span>{" "}
-            <code className="bg-blue-600 px-2 py-1 rounded text-white text-xs break-all">
-              {`${window.location.origin}/wallet-history/${r.request_id}`}
-            </code>
-          </div>
-        </div>
+            </div>
+          </>
+        )}
       </div>
     </motion.div>
   );
@@ -151,12 +126,9 @@ export default function UserWalletHistoryPage() {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
-      const res = await axios.get(
-        `${API_BASE}/api/wallet/reqwest/`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const res = await axios.get(`${API_BASE}/api/wallet/reqwest/`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setHistory(res.data);
     } catch (err) {
       toast.error("Failed to load wallet history.");
@@ -176,7 +148,9 @@ export default function UserWalletHistoryPage() {
       toast.success("Request cancelled.");
       await fetchUserRequests();
     } catch (err) {
-      toast.error("Failed to cancel request.");
+      toast.error(
+        err?.response?.data?.message || "Failed to cancel request."
+      );
     } finally {
       setCancelling((c) => ({ ...c, [request_id]: false }));
     }

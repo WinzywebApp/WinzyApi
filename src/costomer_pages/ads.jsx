@@ -6,8 +6,7 @@ import { FaCoins, FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
-
-const MAX_ADS_PER_DAY = 10;
+const MAX_ADS_PER_DAY = 20;
 
 export default function WatchAdsPage() {
   const [adsWatched, setAdsWatched] = useState(0);
@@ -38,21 +37,28 @@ export default function WatchAdsPage() {
     try {
       const token = localStorage.getItem("token");
       setLoadingIndex(idx);
-      toast.loading("Ad watching started... ⏳");
+      toast.loading("Loading Ad... ⏳");
 
-      const res = await axios.post(
-        `${API_BASE}/api/ads/watchAd`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      // 🟡 Show Monetag rewarded interstitial ad
+      if (typeof show_9683609 === "function") {
+        show_9683609().then(async () => {
+          toast.dismiss();
+          toast.success("Ad watched! Coins will be added in ");
+          startCountdown(idx);
 
-      if (res.data.success) {
-        toast.dismiss();
-        toast.success("Ad watched! Coins will be added in 18 seconds 🚀");
-        startCountdown(idx);
+          try {
+            await axios.post(
+              `${API_BASE}/api/ads/watchAd`,
+              {},
+              { headers: { Authorization: `Bearer ${token}` } }
+            );
+          } catch (err) {
+            console.error("Failed to update backend", err);
+          }
+        });
       } else {
         toast.dismiss();
-        toast.error(res.data.message || "Ad watch failed");
+        toast.error("Ad failed to load");
         setLoadingIndex(null);
       }
     } catch (err) {
@@ -63,7 +69,7 @@ export default function WatchAdsPage() {
   };
 
   const startCountdown = (idx) => {
-    let seconds = 18;
+    let seconds = 15;
     setCountdown(seconds);
 
     const interval = setInterval(() => {
@@ -84,7 +90,7 @@ export default function WatchAdsPage() {
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex flex-col items-center">
       <Toaster position="top-center" />
 
-      {/* 🎯 Replaced with Spin & Win-style Header */}
+      {/* 🔷 Header */}
       <header className="w-full bg-white px-4 py-3 shadow-sm sticky top-0 z-10 flex items-center justify-center relative rounded-b-2xl">
         <button
           onClick={() => navigate(-1)}
@@ -98,6 +104,7 @@ export default function WatchAdsPage() {
         </h1>
       </header>
 
+      {/* 🔷 Main Card */}
       <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl p-6 border border-blue-200 mt-6">
         <p className="text-center text-gray-600 mb-6">
           Watch up to{" "}
@@ -109,14 +116,12 @@ export default function WatchAdsPage() {
           {Array.from({ length: MAX_ADS_PER_DAY }).map((_, idx) => {
             const isWatched = idx < adsWatched;
             const isCurrent = idx === loadingIndex;
-            const adLink = `https://example.com/ads/${idx + 1}`;
 
             return (
               <a
                 key={idx}
-                href={isWatched || countdown ? undefined : adLink}
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#"
+                onClick={(e) => handleAdClick(idx, e)}
                 className={`flex flex-col items-center justify-center h-24 rounded-2xl border-2 transition-all shadow-sm hover:shadow-md
                   ${
                     isWatched
@@ -125,7 +130,6 @@ export default function WatchAdsPage() {
                       ? "border-yellow-500 bg-yellow-50 text-yellow-800 animate-pulse"
                       : "border-gray-200 bg-gray-50 text-gray-600 hover:bg-blue-50 hover:border-blue-300"
                   }`}
-                onClick={(e) => handleAdClick(idx, e)}
               >
                 {isWatched ? (
                   <CheckCircle className="w-6 h-6 mb-1" />
@@ -141,7 +145,7 @@ export default function WatchAdsPage() {
                 </span>
                 <div className="flex items-center text-yellow-600 text-sm mt-1">
                   <FaCoins className="w-4 h-4 mr-1" />
-                  <span className="font-semibold">1000</span>
+                  <span className="font-semibold">100</span>
                 </div>
               </a>
             );

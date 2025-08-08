@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { FaCoins, FaPen, FaTrash, FaPlus } from "react-icons/fa";
+import { FaCoins, FaPen, FaTrash, FaPlus, FaTrophy } from "react-icons/fa";
 import toast, { Toaster } from "react-hot-toast";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
+const WINNER_ENDPOINT = `${API_BASE}/api/bets/select-winner`; // assumes backend route is /api/bets-item/select-winner/:product_id
 
 const emptyForm = {
   name: "",
@@ -21,6 +22,7 @@ const BetItemPage = () => {
   const [newItem, setNewItem] = useState(emptyForm);
   const [showEditForm, setShowEditForm] = useState(false);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [selectingWinner, setSelectingWinner] = useState({}); // map of product_id to boolean
 
   const fetchItems = async () => {
     try {
@@ -145,6 +147,42 @@ const BetItemPage = () => {
     }
   };
 
+  const handleSelectWinner = async (item) => {
+    const productId = item.product_id || item.product_id === undefined ? item.product_id : item._id;
+    if (!productId) {
+      toast.error("Missing product identifier to select winner");
+      return;
+    }
+    setSelectingWinner((s) => ({ ...s, [productId]: true }));
+    try {
+      // call backend; assumes endpoint uses product_id param
+      const res = await axios.post(
+        `${WINNER_ENDPOINT}/${productId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      const winner = res.data?.winner;
+      if (winner) {
+        const name = winner.user_name || winner.user_email || "Unknown";
+        toast.success(`🏆 Winner selected: ${name}`);
+      } else {
+        toast.success("🏆 Winner selection completed");
+      }
+      // optionally refresh items if winner affects display
+      fetchItems();
+    } catch (err) {
+      console.error("Select winner failed:", err?.response?.data || err?.message);
+      const msg = err?.response?.data?.message || "Failed to select winner";
+      toast.error(`❌ ${msg}`);
+    } finally {
+      setSelectingWinner((s) => ({ ...s, [productId]: false }));
+    }
+  };
+
   return (
     <div className="p-4">
       <Toaster position="top-right" />
@@ -202,23 +240,32 @@ const BetItemPage = () => {
                     <FaCoins className="inline text-yellow-500" /> {item.coin_price} | 💰 LKR {item.main_price}
                   </p>
                   <p className="text-xs text-gray-500">
-                    Start: {new Date(item.start_time).toLocaleString()}<br />
+                    Start: {new Date(item.start_time).toLocaleString()}
+                    <br />
                     End: {new Date(item.end_time).toLocaleString()}
                   </p>
                 </div>
               </div>
-              <div className="flex justify-end gap-2">
+              <div className="flex justify-end gap-2 flex-wrap">
                 <button
                   onClick={() => handleEditClick(item)}
-                  className="px-3 py-1 bg-indigo-600 text-white rounded text-sm"
+                  className="px-3 py-1 bg-indigo-600 text-white rounded text-sm flex items-center gap-1"
                 >
                   <FaPen className="inline" /> Edit
                 </button>
                 <button
                   onClick={() => handleDelete(item._id)}
-                  className="px-3 py-1 bg-red-600 text-white rounded text-sm"
+                  className="px-3 py-1 bg-red-600 text-white rounded text-sm flex items-center gap-1"
                 >
                   <FaTrash className="inline" /> Delete
+                </button>
+                <button
+                  onClick={() => handleSelectWinner(item)}
+                  disabled={selectingWinner[item.product_id || item._id]}
+                  className="px-3 py-1 bg-yellow-600 text-white rounded text-sm flex items-center gap-1"
+                >
+                  <FaTrophy className="inline" />{" "}
+                  {selectingWinner[item.product_id || item._id] ? "Selecting..." : "Select Winner"}
                 </button>
               </div>
             </div>

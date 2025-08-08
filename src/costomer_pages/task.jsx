@@ -46,13 +46,13 @@ function TaskCard({ task, onComplete }) {
       className="bg-white border border-blue-100 rounded-2xl shadow-sm p-4 mb-3 cursor-pointer hover:shadow-md transition-all duration-150 flex items-center justify-between"
     >
       {/* Coin on LEFT */}
-      <div className="flex items-center gap-1 text-yellow-500 font-bold min-w-[70px] justify-start">
+      <div className="flex items-center gap-1 text-gray-800 font-bold min-w-[70px] justify-start">
         <FaCoins className="text-lg" />
         <span>{task.point_balance}</span>
       </div>
 
       {/* Task Description CENTER */}
-      <p className="text-sm font-medium text-gray-800 flex-1 mx-4 text-center">
+      <p className="text-sm font-medium text-gray-5000 flex-1 mx-4 text-center">
         {task.task_description}
       </p>
 
@@ -109,7 +109,7 @@ export default function TaskPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-blue-100">
       {/* React Hot Toast container */}
       <Toaster position="top-right" reverseOrder={false} />
 
