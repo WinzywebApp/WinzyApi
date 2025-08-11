@@ -187,8 +187,8 @@ const BetItemsGrid = () => {
 
                 <div className="flex items-center justify-between text-sm font-semibold">
                   <div className="flex items-center text-yellow-600 font-semibold">
-                    <span className="text-green-700 flex items-center">
-                      💰 {product.main_price} Coins
+                    <span className="text-gray-700 flex items-center">
+                      💰 Rs. {product.main_price} 
                     </span>
                   </div>
                   <span className="text-[11px] text-blue-600 bg-blue-100 px-2 py-0.5 rounded-full">

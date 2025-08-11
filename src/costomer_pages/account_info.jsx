@@ -168,7 +168,7 @@ function AccInfo() {
     // Choose image/name fields with fallback
     const itemImage =
       bet.item_image ||
-      bet.product_image ||
+      bet.product_image || bet.product_details?.product_image
       "https://via.placeholder.com/64";
     const itemName =
       bet.item_name || bet.product_name || bet.product_details?.product_name || "Unknown Item";
@@ -249,7 +249,7 @@ function AccInfo() {
           <div className="flex flex-col items-center justify-center h-full relative">
             <div className="relative">
               <img
-                src={user.image || "https://via.placeholder.com/60"}
+                src={user.image || "https://i.ibb.co/dwhB6Xy0/who-has-any-bart-simpson-pfps-not-the-horrible-emo-ones-v0-869inxr4zljd1.jpg"}
                 alt="Profile"
                 className="w-16 h-16 rounded-full border-2 border-white mb-2"
               />
@@ -257,10 +257,10 @@ function AccInfo() {
             <h2 className="text-lg font-semibold mt-1">@{user.username}</h2>
           </div>
 
-          <div className="absolute bottom-2 left-4 text-sm font-bold flex items-center gap-1">
-            <FaMoneyBillWave className="text-white" /> {user.main_balance}
+          <div className="absolute bottom-2 left-4 text-[16px] font-bold flex items-center gap-1">
+            Rs. {user.main_balance}
           </div>
-          <div className="absolute bottom-2 right-4 text-sm font-bold flex items-center gap-1">
+          <div className="absolute bottom-2 right-4 text-[16px] font-bold flex items-center gap-1">
             <FaCoins className="text-white" /> {user.coin_balance}
           </div>
         </div>

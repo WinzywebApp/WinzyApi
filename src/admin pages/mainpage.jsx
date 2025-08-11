@@ -416,28 +416,30 @@ export default function DashboardMobilePage() {
           )}
 
           {/* Orders */}
-          {!loading && activeFilter === "orders" && (
-            <>
-              {Object.keys(groupedOrders).length === 0 ? (
-                <div className="text-center text-gray-500 mt-10">
-                  No orders found.
-                </div>
-              ) : (
-                Object.entries(groupedOrders).map(([date, items]) => (
-                  <div key={date} className="mb-6">
-                    <div className="text-sm font-semibold mb-2">{date}</div>
-                    {items.map((order) => (
-                      <OrderCard
-                        key={order._id || order.order_id}
-                        order={order}
-                        onSaveStatus={handleSaveStatusFromOrder}
-                      />
-                    ))}
-                  </div>
-                ))
-              )}
-            </>
-          )}
+         {!loading && activeFilter === "orders" && (
+  <>
+    {Object.keys(groupedOrders).length === 0 ? (
+      <div className="text-center text-gray-500 mt-10">
+        No orders found.
+      </div>
+    ) : (
+      Object.entries(groupedOrders)
+        .sort(([dateA], [dateB]) => new Date(dateB) - new Date(dateA)) // 🆕 latest first
+        .map(([date, items]) => (
+          <div key={date} className="mb-6">
+            <div className="text-sm font-semibold mb-2">{date}</div>
+            {items.map((order) => (
+              <OrderCard
+                key={order._id || order.order_id}
+                order={order}
+                onSaveStatus={handleSaveStatusFromOrder}
+              />
+            ))}
+          </div>
+        ))
+    )}
+  </>
+)}
 
           {/* Bets */}
           {!loading && activeFilter === "bets" && (

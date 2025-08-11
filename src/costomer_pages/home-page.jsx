@@ -13,6 +13,7 @@ import {
   FaTiktok,
   FaTasks,
   FaHandPaper,
+  FaYoutube,
 } from "react-icons/fa";
 import {IoTicket} from "react-icons/io5"
 import { motion, AnimatePresence } from "framer-motion";
@@ -133,7 +134,7 @@ function HomePage() {
   return (
     <div className="min-h-screen pb-20 relative overflow-x-hidden bg-white">
       {/* Navbar */}
-      <div className="fixed top-0 left-0 z-40 w-full h-16 bg-blue-500 rounded-r-2xl flex items-center justify-between px-4 text-white shadow-md">
+      <div className="fixed top-0 left-0 z-40 w-full h-16 bg-blue-600 rounded-r-2xl flex items-center justify-between px-4 text-white shadow-md">
         <FaBars className="w-6 h-6 cursor-pointer" onClick={() => setShowMenu(!showMenu)} />
         <img src="/logo.png" alt="Logo" className="h-[35px] w-[110px] object-contain" />
         <FaUserCircle className="w-7 h-7 cursor-pointer" onClick={() => navigate("/account")} />
@@ -188,10 +189,20 @@ function HomePage() {
         </div>
 
         <div className="flex justify-around py-4">
-          <FaTelegram className="text-white text-2xl cursor-pointer" />
-          <FaTiktok className="text-white text-2xl cursor-pointer" />
-          <FaFacebook className="text-white text-2xl cursor-pointer" />
+          <a href="https://t.me/cooba_news" target="_blank" rel="noopener noreferrer">
+            <FaTelegram className="text-white text-2xl cursor-pointer" />
+          </a>
+          <a href="https://www.tiktok.com/@cooba_app" target="_blank" rel="noopener noreferrer">
+            <FaTiktok className="text-white text-2xl cursor-pointer" />
+          </a>
+          <a href="https://facebook.com/cooba.362071" target="_blank" rel="noopener noreferrer">
+            <FaFacebook className="text-white text-2xl cursor-pointer" />
+          </a>
+           <a href="https://www.youtube.com/@cooba-app" target="_blank" rel="noopener noreferrer">
+          <FaYoutube className="text-white text-2xl cursor-pointer" /> 
+          </a>
         </div>
+
 
         <p className="text-center text-xs mt-4">© 2025 All rights reserved</p>
       </motion.div>
@@ -249,7 +260,7 @@ function HomePage() {
         transition={{ duration: 0.5, delay: 0.1 }}
         className="text-lg font-bold text-gray-700 px-4 mt-2 mb-2"
       >
-        Earn Coins 💰
+        Features 😎
       </motion.h2>
 
       {/* Feature Grid */}
@@ -357,7 +368,7 @@ function HomePage() {
                     {product.name}
                   </h3>
                   <div className="flex items-center mt-2">
-                    < FaCoins className ="w-4 h-4 mr-1" />
+                    < FaCoins className ="w-4 h-4 mr-1 text-gray-800" />
                     <span className=" text-sm font-bold">
                       {product.coin_price}
                     </span>
@@ -384,7 +395,7 @@ function WinnerCard({ order }) {
   const userEmail = order?.user_name || "Unknown User";
 
   return (
-    <div className="bg-blue-400 rounded-xl shadow-lg flex items-center gap-4 p-4 w-full border border-indigo-300">
+    <div className="bg-blue-500 rounded-xl shadow-lg flex items-center gap-4 p-4 w-full border border-indigo-300">
       <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-white shadow-sm flex-shrink-0">
         <img
           src={productImage}

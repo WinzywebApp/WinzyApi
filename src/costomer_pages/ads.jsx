@@ -69,7 +69,7 @@ export default function WatchAdsPage() {
   };
 
   const startCountdown = (idx) => {
-    let seconds = 15;
+    let seconds = 2;
     setCountdown(seconds);
 
     const interval = setInterval(() => {
@@ -78,7 +78,7 @@ export default function WatchAdsPage() {
 
       if (seconds <= 0) {
         clearInterval(interval);
-        toast.success("✅ Coins added!");
+        toast.success(" Coins added!");
         setCountdown(null);
         setAdsWatched((prev) => prev + 1);
         setLoadingIndex(null);
@@ -139,10 +139,11 @@ export default function WatchAdsPage() {
                   <MonitorPlay className="w-6 h-6 mb-1" />
                 )}
                 <span className="text-xs font-medium">
-                  {isCurrent && countdown !== null
-                    ? `⏳ ${countdown}s`
-                    : `Ad ${idx + 1}`}
-                </span>
+                    {isWaiting
+                      ? "⌛ Waiting..."
+                      : `Ad ${idx + 1}`}
+                  </span>
+
                 <div className="flex items-center text-yellow-600 text-sm mt-1">
                   <FaCoins className="w-4 h-4 mr-1" />
                   <span className="font-semibold">100</span>
