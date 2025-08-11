@@ -39,7 +39,7 @@ export default function WatchAdsPage() {
       setLoadingIndex(idx);
       toast.loading("Loading Ad... ⏳");
 
-      // 🟡 Show Monetag rewarded interstitial ad
+      // Show Monetag rewarded interstitial ad
       if (typeof show_9683609 === "function") {
         show_9683609().then(async () => {
           toast.dismiss();
@@ -78,7 +78,7 @@ export default function WatchAdsPage() {
 
       if (seconds <= 0) {
         clearInterval(interval);
-        toast.success(" Coins added!");
+        toast.success("Coins added!");
         setCountdown(null);
         setAdsWatched((prev) => prev + 1);
         setLoadingIndex(null);
@@ -90,7 +90,7 @@ export default function WatchAdsPage() {
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex flex-col items-center">
       <Toaster position="top-center" />
 
-      {/* 🔷 Header */}
+      {/* Header */}
       <header className="w-full bg-white px-4 py-3 shadow-sm sticky top-0 z-10 flex items-center justify-center relative rounded-b-2xl">
         <button
           onClick={() => navigate(-1)}
@@ -104,7 +104,7 @@ export default function WatchAdsPage() {
         </h1>
       </header>
 
-      {/* 🔷 Main Card */}
+      {/* Main Card */}
       <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl p-6 border border-blue-200 mt-6">
         <p className="text-center text-gray-600 mb-6">
           Watch up to{" "}
@@ -116,6 +116,7 @@ export default function WatchAdsPage() {
           {Array.from({ length: MAX_ADS_PER_DAY }).map((_, idx) => {
             const isWatched = idx < adsWatched;
             const isCurrent = idx === loadingIndex;
+            const isWaiting = idx === loadingIndex && countdown !== null;
 
             return (
               <a
@@ -139,10 +140,10 @@ export default function WatchAdsPage() {
                   <MonitorPlay className="w-6 h-6 mb-1" />
                 )}
                 <span className="text-xs font-medium">
-                    {isWaiting
-                      ? "⌛ Waiting..."
-                      : `Ad ${idx + 1}`}
-                  </span>
+                  {isWaiting
+                    ? `⌛ Waiting... ${countdown}s`
+                    : `Ad ${idx + 1}`}
+                </span>
 
                 <div className="flex items-center text-yellow-600 text-sm mt-1">
                   <FaCoins className="w-4 h-4 mr-1" />

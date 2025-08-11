@@ -15,11 +15,11 @@ const plans = [
     price: 50,
     emoji: "🥈",
     methods: [
-      { name: "mCASH", img: "https://i.ibb.co/bgM0Bpv3/unnamed.png" },
-      { name: "eZycash", img: "https://i.ibb.co/wNtCmkWJ/FB-IMG-1754848064115.jpg" },
-      { name: "Hela Pay", img: "https://i.ibb.co/TQCwgz5/FB-IMG-1754848792965.jpg" },
-      { name: "Lanka Pay", img: "https://i.ibb.co/ZRMZRFGX/FB-IMG-1754848280550.jpg" },
-      { name: "CDM/Online Bank Transfer", img: "https://i.ibb.co/MkGKnvvF/bank-icon-logo-design-vector.jpg" },
+      { name: "mCASH", img: "./mcash.jpg" },
+      { name: "eZycash", img: "./ezcash.jpg" },
+      { name: "Hela Pay", img: "./helapay.jpg" },
+      { name: "Lanka Pay", img: "./lankapay.jpg" },
+      { name: "CDM/Online Bank Transfer", img: "./bank.jpg" },
     ],
   },
   {
