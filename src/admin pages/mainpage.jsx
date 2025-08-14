@@ -101,93 +101,91 @@ function OrderCard({ order, onSaveStatus }) {
   const order_id = order.order_id || "none";
 
   return (
-    <div className="bg-white rounded-xl shadow p-4 mb-3">
-      <div className="flex justify-between items-start">
-        <div className="flex-1 space-y-1">
-          <div className="font-bold text-lg">
-            Order ID: {order._id || order.order_id || order.oder_id || "N/A"}
-          </div>
-          <div className="text-sm text-gray-700">
-            <span className="font-semibold">User Email:</span> {order.user_email}
-          </div>
-          <div className="text-sm text-gray-700">
-            <span className="font-semibold">Created At:</span> {createdDate}
-          </div>
-          <div className="text-sm text-gray-700">
-            <span className="font-semibold">Product Name:</span>{" "}
-            {order.product_details?.product_name || "-"}
-          </div>
-          <div className="text-sm text-gray-700">
-            <span className="font-semibold">Quantity:</span> {quantity}
-          </div>
-          <div className="text-sm text-gray-700">
-            <span className="font-semibold">Price per unit:</span> LKR {pricePerUnit.toLocaleString()}
-          </div>
-          <div className="text-sm text-gray-700">
-            <span className="font-semibold">Total Price:</span> LKR {totalPrice.toLocaleString()}
-          </div>
-          <div className="text-sm text-gray-700">
-            <span className="font-semibold">Oder id:</span> {order_id}
-          </div>
-
-          {/* Optional fields: shipping address, phone, notes */}
-          {order.shipping_address && (
-            <div className="text-sm text-gray-700">
-              <span className="font-semibold">Shipping Address:</span> {order.shipping_address}
-            </div>
-          )}
-          {order.phone && (
-            <div className="text-sm text-gray-700">
-              <span className="font-semibold">Phone:</span> {order.phone}
-            </div>
-          )}
-          {order.notes && (
-            <div className="text-sm text-gray-700">
-              <span className="font-semibold">Notes:</span> {order.notes}
-            </div>
-          )}
+  <div className="bg-white rounded-xl shadow p-4 mb-3">
+    <div className="flex justify-between items-start">
+      <div className="flex-1 space-y-1">
+        {/* Order ID */}
+        <div className="font-bold text-lg">
+          Order ID: {order.order_id || order._id || "N/A"}
         </div>
-        <div className="ml-4 flex flex-col items-end gap-2">
-          {editing ? (
-            <div className="flex gap-1">
-              <select
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-                className="text-sm rounded border px-2 py-1"
-              >
-                <option value="">Select</option>
-                <option value="pending">Pending</option>
-                <option value="shipped">Shipped</option>
-                <option value="delivered">Delivered</option>
-                <option value="cancelled">Cancelled</option>
-              </select>
-              <button onClick={save} className="text-green-600 ml-1" aria-label="Save">
-                <FaSave />
-              </button>
-              <button
-                onClick={() => {
-                  setStatus(order.order_status);
-                  setEditing(false);
-                }}
-                className="text-red-600 ml-1"
-                aria-label="Cancel"
-              >
-                <FaTimes />
-              </button>
-            </div>
-          ) : (
-            <div className="flex items-center gap-2">
-              <div className="text-sm capitalize">{order.order_status || "-"}</div>
-              <button onClick={() => setEditing(true)} className="text-indigo-600" aria-label="Edit">
-                <FaEdit />
-              </button>
-            </div>
-          )}
+
+        {/* User Details */}
+        <div className="text-sm text-gray-700">
+          <span className="font-semibold">User Name:</span> {order.user_name || order.user_address?.name || "-"}
+        </div>
+        <div className="text-sm text-gray-700">
+          <span className="font-semibold">User Email:</span> {order.user_email}
+        </div>
+        <div className="text-sm text-gray-700">
+          <span className="font-semibold">Phone Number:</span> {order.user_address?.phone_number || "-"}
+        </div>
+        <div className="text-sm text-gray-700">
+          <span className="font-semibold">Address:</span>{" "}
+          {order.user_address
+            ? `${order.user_address.address_line}, ${order.user_address.district}`
+            : "-"}
+        </div>
+
+        {/* Order Info */}
+        <div className="text-sm text-gray-700">
+          <span className="font-semibold">Created At:</span> {createdDate}
+        </div>
+        <div className="text-sm text-gray-700">
+          <span className="font-semibold">Product Name:</span> {order.product_details?.product_name || "-"}
+        </div>
+        <div className="text-sm text-gray-700">
+          <span className="font-semibold">Quantity:</span> {quantity}
+        </div>
+        <div className="text-sm text-gray-700">
+          <span className="font-semibold">Price per unit:</span> LKR {pricePerUnit.toLocaleString()}
+        </div>
+        <div className="text-sm text-gray-700">
+          <span className="font-semibold">Total Price:</span> LKR {totalPrice.toLocaleString()}
         </div>
       </div>
+
+      {/* Order Status Edit */}
+      <div className="ml-4 flex flex-col items-end gap-2">
+        {editing ? (
+          <div className="flex gap-1">
+            <select
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+              className="text-sm rounded border px-2 py-1"
+            >
+              <option value="">Select</option>
+              <option value="pending">Pending</option>
+              <option value="shipped">Shipped</option>
+              <option value="delivered">Delivered</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+            <button onClick={save} className="text-green-600 ml-1" aria-label="Save">
+              <FaSave />
+            </button>
+            <button
+              onClick={() => {
+                setStatus(order.order_status);
+                setEditing(false);
+              }}
+              className="text-red-600 ml-1"
+              aria-label="Cancel"
+            >
+              <FaTimes />
+            </button>
+          </div>
+        ) : (
+          <div className="flex items-center gap-2">
+            <div className="text-sm capitalize">{order.order_status || "-"}</div>
+            <button onClick={() => setEditing(true)} className="text-indigo-600" aria-label="Edit">
+              <FaEdit />
+            </button>
+          </div>
+        )}
+      </div>
     </div>
-  );
-}
+  </div>
+);
+};
 
 function BetCard({ bet }) {
   const date = new Date(bet.created_at || bet.placed_at).toLocaleString("en-GB", {

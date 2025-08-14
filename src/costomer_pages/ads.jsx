@@ -15,6 +15,19 @@ export default function WatchAdsPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Load external ad script
+    const script = document.createElement("script");
+    script.src = "//pl27372407.profitableratecpm.com/a7/dd/7c/a7dd7c35c350fb13d330fffd5ed65314.js";
+    script.async = true;
+    document.body.appendChild(script);
+
+    // Cleanup
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  useEffect(() => {
     fetchAdStats();
   }, []);
 
@@ -147,7 +160,7 @@ export default function WatchAdsPage() {
 
                 <div className="flex items-center text-yellow-600 text-sm mt-1">
                   <FaCoins className="w-4 h-4 mr-1" />
-                  <span className="font-semibold">100</span>
+                  <span className="font-semibold">150</span>
                 </div>
               </a>
             );

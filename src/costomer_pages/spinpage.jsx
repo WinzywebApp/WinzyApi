@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { FaCoins, FaArrowLeft } from "react-icons/fa";
 import { toast, Toaster } from "react-hot-toast";
@@ -12,6 +12,19 @@ export default function SpinAndWin() {
   const [coins, setCoins] = useState(null);
   const [isSpinning, setIsSpinning] = useState(false);
   const [spinsRemaining, setSpinsRemaining] = useState(5);
+
+  // ✅ Load external ad script
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src =
+      "//pl27372407.profitableratecpm.com/a7/dd/7c/a7dd7c35c350fb13d330fffd5ed65314.js";
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
 
   const animateNumber = (target) => {
     let current = 0;
@@ -49,7 +62,8 @@ export default function SpinAndWin() {
         }
       );
 
-      const { number: finalNum, coins: wonCoins, spinsRemaining, message } = res.data;
+      const { number: finalNum, coins: wonCoins, spinsRemaining, message } =
+        res.data;
 
       animateNumber(finalNum);
       setCoins(wonCoins);
@@ -141,6 +155,47 @@ export default function SpinAndWin() {
               💸 Buy Extra Spins – Rs.10
             </button>
           </div>
+        </div>
+      </div>
+
+      {/* 📝 Coin Rules Display */}
+      <div className="mt-8 px-4">
+        <div className="bg-white rounded-2xl shadow-lg p-6 max-w-md mx-auto">
+          <h2 className="text-xl font-bold text-blue-700 mb-4 flex items-center gap-2">
+            📜 Coin Winning Rules
+          </h2>
+          <ul className="space-y-3 text-gray-700 text-sm">
+            <li>
+              🌀 <b>Daily Spins:</b> Maximum of 5 spins per day.
+            </li>
+            <li>
+              ⏰ <b>Special Hours:</b> 00:00, 03:00, 06:00, 09:00, 12:00, 15:00
+              → <span className="text-yellow-600 font-bold">300 coins</span>
+            </li>
+            <li>
+              🏆 <b>Daily Winner:</b> Number <b>9999</b> →{" "}
+              <span className="text-yellow-600 font-bold">500 coins</span>
+            </li>
+            <li>
+              1 – 2000 → Random <b>0 – 100</b> coins (rounded to nearest 10)
+            </li>
+            <li>
+              2500 – 4000 → Random <b>100 – 200</b> coins (rounded to nearest 10)
+            </li>
+            <li>
+              4500 – 5000 → Random <b>200 – 550</b> coins (rounded to nearest 10)
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      {/* ✅ CPM Ad Placeholder */}
+      <div className="mt-8 px-4">
+        <div
+          className="bg-white rounded-2xl shadow-lg p-6 max-w-md mx-auto text-center"
+          id="profitableratecpm-ad"
+        >
+          📰 Your ad will appear here
         </div>
       </div>
     </div>

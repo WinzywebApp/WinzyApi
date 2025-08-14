@@ -88,8 +88,6 @@ const OrderPage = () => {
 
   return (
     <div className="min-h-screen bg-blue-100 via-white to-green-50 relative pt-24 pb-28">
-      <Toaster position="top-right" toastOptions={{ duration: 4000 }} />
-
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-30 bg-gradient-to-r from-blue-600 to-blue-500 text-white py-5 px-6 flex justify-center items-center shadow-md">
         <div className="absolute top-4 left-4 z-40">

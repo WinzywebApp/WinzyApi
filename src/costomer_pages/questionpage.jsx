@@ -69,8 +69,7 @@ export default function EmojiQuizApp() {
       if (correct) {
         toast.success(
           <>
-            <CheckCircle className="inline mr-1" size={20} /> Correct! +{reward} coins ,
-            ⏳ Attempts left: {attempts_remaining} / 10
+            <CheckCircle className="inline mr-1" size={20} /> Correct! {attempts_remaining} / 10
           </>
         );
       } else {
@@ -91,7 +90,7 @@ export default function EmojiQuizApp() {
           setCurrentIdx(currentIdx + 1);
         } else {
           clearInterval(timerRef.current);
-          toast("🎉 Quiz completed!", { icon: "✅" });
+          toast("🎉 Quiz completed!", );
         }
       }, 1000);
     } catch (error) {
@@ -105,7 +104,6 @@ export default function EmojiQuizApp() {
 
   return (
     <div className="min-h-screen bg-blue-100 flex flex-col">
-      <Toaster position="top-center" />
 
       {/* ✅ Beautiful Header */}
       <header className="w-full bg-white px-4 py-3 shadow-sm sticky top-0 z-10 flex items-center justify-center relative rounded-b-2xl">

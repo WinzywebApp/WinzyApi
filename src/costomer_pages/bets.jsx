@@ -7,8 +7,9 @@ import { motion, AnimatePresence } from "framer-motion";
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 function WinnerCard({ order }) {
-  const productImage = order?.product_details?.product_image || "/default.png";
-  const userEmail = order?.user_name || "Unknown User";  
+  const productImage = order?.product_image || "/default.png";
+  const userEmail = order?.user_name || "Unknown User"; 
+  const date = order?.created_at ; 
 
   return (
     <div className="bg-blue-400 rounded-xl shadow-lg flex items-center gap-4 p-5 w-full border border-indigo-300">
@@ -25,6 +26,9 @@ function WinnerCard({ order }) {
         </h3>
         <p className="text-sm text-white mt-1 truncate select-text">
           🧑 {userEmail}
+        </p>
+        <p className="text-sm text-white mt-1 truncate select-text">
+           {date}
         </p>
       </div>
     </div>
