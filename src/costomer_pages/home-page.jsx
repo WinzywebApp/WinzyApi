@@ -15,9 +15,8 @@ import {
   FaHandPaper,
   FaYoutube,
 } from "react-icons/fa";
-import {IoTicket} from "react-icons/io5"
+import { IoTicket } from "react-icons/io5";
 import { motion, AnimatePresence } from "framer-motion";
-
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
@@ -114,13 +113,13 @@ function HomePage() {
   const handleCategorySelect = (cat) => {
     setSelected(cat);
     if (cat === "ALL") fetchAllProducts();
-    else fetchProductsByCategory(cat.toLowerCase());
+    else if (cat === "Boys'") fetchProductsByCategory("tech");
+    else if (cat === "Girls'") fetchProductsByCategory("beauty");
+    else if (cat === "Perfume") fetchProductsByCategory("perfume");
   };
 
-  const currentOrder = orders.length > 0 ? orders[currentOrderIndex] : null;
-  const prevOrder = prevOrderIndex !== null ? orders[prevOrderIndex] : null;
-
-  const categories = ["ALL", "Tech", "Beauty", "Perfumes"];
+  // Updated display names
+  const categories = ["ALL", "Boys'", "Girls'", "Perfume"];
 
   const features = [
     { icon: <FaVideo className="text-pink-500 text-2xl" />, label: "Video Earn", route: "/watch" },
@@ -142,76 +141,69 @@ function HomePage() {
       <div className="h-16" />
 
       {/* Slide out menu with backdrop */}
-<AnimatePresence>
-  {showMenu && (
-    <>
-      {/* Backdrop - clicking it will close the menu */}
-      <motion.div
-        className="fixed inset-0 bg-black bg-opacity-40 z-40"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        onClick={() => setShowMenu(false)}
-      />
+      <AnimatePresence>
+        {showMenu && (
+          <>
+            <motion.div
+              className="fixed inset-0 bg-black bg-opacity-40 z-40"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowMenu(false)}
+            />
+            <motion.div
+              className="fixed top-0 left-0 h-full w-[250px] bg-blue-500 text-white z-50 shadow-lg p-4 flex flex-col justify-between"
+              initial={{ x: -250 }}
+              animate={{ x: 0 }}
+              exit={{ x: -250 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div>
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-xl font-bold text-center w-full">Menu</h2>
+                  <button onClick={() => setShowMenu(false)} className="text-white text-xl  absolute right-4 top-4">
+                    ×
+                  </button>
+                </div>
+                <ul className="space-y-4">
+                  <li>
+                    <button onClick={() => { navigate("/contact"); setShowMenu(false); }}>
+                      Contact
+                    </button>
+                  </li>
+                  <li>
+                    <button onClick={() => { navigate("/privacy-policy"); setShowMenu(false); }}>
+                      Privacy Policy
+                    </button>
+                  </li>
+                  <li>
+                    <button onClick={() => { navigate("/terms-conditions"); setShowMenu(false); }}>
+                      Terms & Conditions
+                    </button>
+                  </li>
+                </ul>
+              </div>
+              <div className="flex justify-around py-4">
+                <a href="https://t.me/cooba_news" target="_blank" rel="noopener noreferrer">
+                  <FaTelegram className="text-white text-2xl cursor-pointer" />
+                </a>
+                <a href="https://www.tiktok.com/@cooba_app" target="_blank" rel="noopener noreferrer">
+                  <FaTiktok className="text-white text-2xl cursor-pointer" />
+                </a>
+                <a href="https://facebook.com/cooba.362071" target="_blank" rel="noopener noreferrer">
+                  <FaFacebook className="text-white text-2xl cursor-pointer" />
+                </a>
+                <a href="https://www.youtube.com/@cooba-app" target="_blank" rel="noopener noreferrer">
+                  <FaYoutube className="text-white text-2xl cursor-pointer" />
+                </a>
+              </div>
+              <p className="text-center text-xs mt-4">© 2025 All rights reserved</p>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
-      {/* Side Menu */}
-      <motion.div
-        className="fixed top-0 left-0 h-full w-[250px] bg-blue-500 text-white z-50 shadow-lg p-4 flex flex-col justify-between"
-        initial={{ x: -250 }}
-        animate={{ x: 0 }}
-        exit={{ x: -250 }}
-        transition={{ duration: 0.3 }}
-      >
-        <div>
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-bold text-center w-full">Menu</h2>
-            <button onClick={() => setShowMenu(false)} className="text-white text-xl  absolute right-4 top-4">
-              ×
-            </button>
-          </div>
-          <ul className="space-y-4">
-            <li>
-              <button onClick={() => { navigate("/contact"); setShowMenu(false); }}>
-                Contact
-              </button>
-            </li>
-            <li>
-              <button onClick={() => { navigate("/privacy-policy"); setShowMenu(false); }}>
-                Privacy Policy
-              </button>
-            </li>
-            <li>
-              <button onClick={() => { navigate("/terms-conditions"); setShowMenu(false); }}>
-                Terms & Conditions
-              </button>
-            </li>
-          </ul>
-        </div>
-
-        <div className="flex justify-around py-4">
-          <a href="https://t.me/cooba_news" target="_blank" rel="noopener noreferrer">
-            <FaTelegram className="text-white text-2xl cursor-pointer" />
-          </a>
-          <a href="https://www.tiktok.com/@cooba_app" target="_blank" rel="noopener noreferrer">
-            <FaTiktok className="text-white text-2xl cursor-pointer" />
-          </a>
-          <a href="https://facebook.com/cooba.362071" target="_blank" rel="noopener noreferrer">
-            <FaFacebook className="text-white text-2xl cursor-pointer" />
-          </a>
-           <a href="https://www.youtube.com/@cooba-app" target="_blank" rel="noopener noreferrer">
-          <FaYoutube className="text-white text-2xl cursor-pointer" /> 
-          </a>
-        </div>
-
-
-        <p className="text-center text-xs mt-4">© 2025 All rights reserved</p>
-      </motion.div>
-    </>
-  )}
-</AnimatePresence>
-
-
-       {/* Winner Card Slider */}
+      {/* Winner Card Slider */}
       <motion.div
         initial="hidden"
         animate="visible"
@@ -223,28 +215,28 @@ function HomePage() {
       >
         <div className="relative w-full h-full">
           <AnimatePresence initial={false}>
-            {prevOrder && (
+            {prevOrderIndex !== null && orders[prevOrderIndex] && (
               <motion.div
-                key={prevOrder.order_id + "-prev"}
+                key={orders[prevOrderIndex].order_id + "-prev"}
                 initial={{ x: 0, opacity: 1 }}
                 animate={{ x: -200, opacity: 0 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.5 }}
                 className="absolute inset-0"
               >
-                <WinnerCard order={prevOrder} />
+                <WinnerCard order={orders[prevOrderIndex]} />
               </motion.div>
             )}
-            {currentOrder && (
+            {orders[currentOrderIndex] && (
               <motion.div
-                key={currentOrder.order_id}
+                key={orders[currentOrderIndex].order_id}
                 initial={{ x: 200, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.5 }}
                 className="absolute inset-0"
               >
-                <WinnerCard order={currentOrder} />
+                <WinnerCard order={orders[currentOrderIndex]} />
               </motion.div>
             )}
           </AnimatePresence>
@@ -340,11 +332,12 @@ function HomePage() {
               transition={{ duration: 0.4 }}
               className="relative bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all"
             >
-              {/* quantity badge */}
               <div className="absolute top-2 right-2 ">
                 <div
                   className={`text-[10px] font-bold px-2 py-1 rounded-full border-[5px] ${
-                    hasStock ? "bg-green-100 text-green-800 border-green-600" : "bg-red-100 text-red-800 border-red-600"
+                    hasStock
+                      ? "bg-green-100 text-green-800 border-green-600"
+                      : "bg-red-100 text-red-800 border-red-600"
                   }`}
                   style={{ padding: "2px 6px" }}
                 >
@@ -368,7 +361,7 @@ function HomePage() {
                     {product.name}
                   </h3>
                   <div className="flex items-center mt-2">
-                    < FaCoins className ="w-4 h-4 mr-1 text-gray-800" />
+                    <FaCoins className="w-4 h-4 mr-1 text-gray-800" />
                     <span className=" text-sm font-bold">
                       {product.coin_price}
                     </span>
@@ -381,14 +374,8 @@ function HomePage() {
       </motion.div>
       <script type='text/javascript' src='//pl27372407.profitableratecpm.com/a7/dd/7c/a7dd7c35c350fb13d330fffd5ed65314.js'></script>
     </div>
-     
   );
 }
-
-
-      {/* Existing WinnerCard, Features, Categories, Products (unchanged) */}
-      {/* ... */}
-
 
 function WinnerCard({ order }) {
   const productImage = order?.product_details?.product_image || "/default.png";

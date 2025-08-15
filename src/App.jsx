@@ -20,6 +20,7 @@ import UserWalletHistoryPage from "./costomer_pages/wallethostory.jsx";
 import  {ContactPage } from "./menu/contact.jsx"
 import {PrivacyPolicyPage } from "./menu/privasy_police.jsx"
 import{TermsConditionsPage} from "./menu/terms&conditions.jsx"
+import SplashScreen from "./components/plash.jsx";
 
 
 
@@ -30,7 +31,8 @@ function App() {
         <Toaster position="top-center" /> 
        
         <Routes>
-          <Route path="/*" element={<AuthPage />} />
+          <Route path="/auth" element={<AuthPage />} />
+          <Route path="/*" element={<SplashScreen />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/account" element={<AccountPage />} />
           <Route path="/product/:id" element={<ProductPage />} />

@@ -192,10 +192,10 @@ export default function SpinAndWin() {
       {/* ✅ CPM Ad Placeholder */}
       <div className="mt-8 px-4">
         <div
-          className="bg-white rounded-2xl shadow-lg p-6 max-w-md mx-auto text-center"
+          className=" rounded-2xl  p-6 max-w-md mx-auto text-center"
           id="profitableratecpm-ad"
         >
-          📰 Your ad will appear here
+          
         </div>
       </div>
     </div>
